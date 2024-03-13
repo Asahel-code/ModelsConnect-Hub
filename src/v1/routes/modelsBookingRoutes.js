@@ -1,0 +1,15 @@
+const express = require("express");
+const router = express.Router();
+const modelsBookingController = require('../../controllers/modelsBookingController');
+const getModelsBooking = require('../../middleware/getModelsBooking');
+const verifyAuth = require('../../middleware/verifyAuth');
+const verifyAdminRole = require("../../middleware/verifyAdminRole");
+const verifyClientRole = require("../../middleware/verifyClientRole");
+
+router.get('/', verifyAuth, verifyAdminRole, modelsBookingController.fetchAllModelBooking);
+router.get('/:bookingId', verifyAuth, getModelsBooking, modelsBookingController.fetchSpecificModelsBooking);
+router.get('/cleint_models_booking', verifyAuth, verifyClientRole, modelsBookingController.fetchClientModelsBooking);
+router.post('/', verifyAuth, verifyClientRole, modelsBookingController.bookModels);
+router.delete('/:bookingId', verifyAuth, verifyClientRole, getModelsBooking, modelsBookingController.deleteModelsBooking);
+
+module.exports = router;
