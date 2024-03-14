@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types'
 import Footer from '../Footer'
 import Header from '../Header'
+import { useLocation } from 'react-router-dom'
 
-const UserLayout = ({ children }) => {
+const PrimaryLayout = ({ children }) => {
+
+    const { pathname } = useLocation();
     return (
         <>
             <Header />
-            <div>
+            <div className={pathname != "/" && "mt-20"}>
                 {children}
             </div>
             <Footer />
@@ -14,9 +17,8 @@ const UserLayout = ({ children }) => {
     )
 }
 
-UserLayout.propTypes = {
+PrimaryLayout.propTypes = {
     children: PropTypes.element.isRequired
 }
 
-
-export default UserLayout
+export default PrimaryLayout

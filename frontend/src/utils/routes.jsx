@@ -1,7 +1,12 @@
-import Login from "../pages/login";
+import Home from "../pages/primary_pages/home"
+import Login from "../pages/primary_pages/login";
 
 
-export const AuthRoutes = [
+export const PrimaryRoutes = [
+    {
+        path: "",
+        element: <Home/>
+    },
     {
         path: "/login",
         element: <Login/>

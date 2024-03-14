@@ -1,19 +1,17 @@
-import { Box, Text, useToast } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import useUserStore from "../utils/zustand/Store";
-import { RiArrowDropDownLine } from "react-icons/ri";
-import { toastProps } from "../utils/toastProps";
+import { Link } from "react-router-dom";
+import { BiMenuAltRight } from "react-icons/bi";
+import { RxCross2 } from "react-icons/rx";
+// import { RiArrowDropDownLine } from "react-icons/ri";
 
 const Header = () => {
-    const toast = useToast();
-    const navigate = useNavigate();
-
+    // const toast = useToast();
+    // const navigate = useNavigate();
+    
     const [openNav, setOpenNav] = useState(false);
-    const user = useUserStore((state) => state.user);
-    const removeToken = useUserStore((state) => state.removeToken);
     const [show, setShow] = useState(false);
-    const [showDropDown, setShowDropDown] = useState(false);
+    // const [showDropDown, setShowDropDown] = useState(false);
 
     const handleScroll = () => {
         if (window.scrollY > 0) {
@@ -25,22 +23,19 @@ const Header = () => {
 
     window.addEventListener('scroll', handleScroll);
 
-    const navbarStyling = "fixed w-full top-0 left-0 z-[99] bg-transparent";
+    const navbarStyling = "fixed w-full top-0 left-0 z-[99]";
+
+    // const logout = () => {
+    //     navigate("/");
+    // }
 
 
-    const logout = () => {
-        removeToken();
-        toast({
-            ...toastProps,
-            title: "Success",
-            description: "You have logged out successfully. Welcome back again",
-            status: "success",
-        });
-        navigate("/");
-    }
 
     const userNavList = (
         <Box className="flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+            <Link to="/" className="hover:text-primary_color hover:font-medium text-md">
+                Home
+            </Link>
             <Link to="/about" className="hover:text-primary_color hover:font-medium text-md">
                 About us
             </Link>
@@ -49,7 +44,7 @@ const Header = () => {
                 Contact us
             </Link>
             <Box>
-                {user?.token
+                {/* {user?.token
                     ? (
                         <Box
                             className="relative"
@@ -115,69 +110,42 @@ const Header = () => {
                             </Box>
                         </Box>
                     )
-                }
+                } */}
             </Box>
         </Box>
     );
 
     return (
-        <Box className={show ? `${navbarStyling} shrink` : navbarStyling}>
-            <div className="mx-3 flex items-center justify-between">
+        <Box className={show ?`${navbarStyling} bg-white text-black`: `${navbarStyling} bg-black text-white`}>
+            <div className="mx-3 h-10 flex items-center justify-between py-8">
                 {/* Logo */}
-                <Box
-                    className="mr-4 cursor-pointer py-1.5 font-bold text-lg"
-                >
-                    <Link to="/">
-                        <h2 className="text-xl md:text-3xl">Pata Hostel</h2>
-                    </Link>
-                </Box>
-
+                <Link className="mr-4" to="/">
+                    <h2 className="text-primary_color font-bold cursor-pointer text-xl md:text-3xl">ModelsConnect Hub.</h2>
+                </Link>
                 {/* Other links */}
                 <div className="hidden lg:block">{userNavList}</div>
-                <Box
-                    className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+                {!openNav && (<Box
+                    className="ml-auto h-6 w-6 text-inherit hover:scale-105 transition-all lg:hidden cursor-pointer"
                     onClick={() => setOpenNav(!openNav)}
                 >
-                    {openNav ? (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            className="h-6 w-6"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    ) : (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
-                        </svg>
-                    )}
+                    <BiMenuAltRight className="text-3xl" />
                 </Box>
+                )}
             </div>
             {openNav &&
                 <Box
-                    className="fixed top-15 right-0 w-full px-5 bg-white z-[99]"
+                    className="fixed top-0 right-0 w-60 h-full px-5 pt-4 bg-white text-black z-[99]"
                     style={{
                         transform: "translateX(-0%)",
                         transition: "transform 0.10s ease",
                     }}
                 >
+                    <button
+                        className="flex items-end focus:outline-none ml-auto h-6 w-6 text-gray hover:scale-105 transition-all"
+                        onClick={() => setOpenNav(!openNav)}
+                    >
+                        <RxCross2 className="text-3xl" />
+                    </button>
                     {userNavList}
                 </Box>
             }

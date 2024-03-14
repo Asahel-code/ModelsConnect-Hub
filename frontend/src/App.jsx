@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthRoutes } from "./utils/routes";
+import { PrimaryRoutes } from "./utils/routes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Aos from "aos";
 import "aos/dist/aos.css"
-import Home from "./pages/home";
+import PrimaryPages from "./pages/primary_pages";
 
 
 function App() {
@@ -20,9 +20,9 @@ function App() {
       <Router>
         <QueryClientProvider client={queryClient}>
           <Routes>
-            <Route path="/" element={<Home/>}>
-            {AuthRoutes.map((r, index) => (
-                <Route key={index} path={r?.route} element={r?.element} />
+            <Route path="/" element={<PrimaryPages />}>
+              {PrimaryRoutes.map((r, index) => (
+                <Route key={index} path={r?.path} element={r?.element} />
               ))}
             </Route>
             {/* <Route path='*' element={<Page404Screen />} /> */}

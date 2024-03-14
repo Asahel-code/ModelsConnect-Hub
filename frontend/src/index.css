@@ -13,13 +13,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.shrink {
-    height: 60px;
-    background: #FFF !important;
-    box-shadow: #05A3FF 0px 8px 24px;
-    z-index: 100;
-}
-
 .image_section {
     background-image: url(./assets/images/hostel_image.png);
     background-repeat: no-repeat;
@@ -99,4 +92,12 @@ body {
     80% {
         opacity: 1;
     }
+}
+
+.circle {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(#F6E0D0, #E59C36);
+    border-radius: 50%;
+    animation: move-up6 2s ease-in infinite alternate-reverse;
 }
