@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BiMenuAltRight } from "react-icons/bi";
 import { RxCross2 } from "react-icons/rx";
 // import { RiArrowDropDownLine } from "react-icons/ri";
@@ -8,7 +8,8 @@ import { RxCross2 } from "react-icons/rx";
 const Header = () => {
     // const toast = useToast();
     // const navigate = useNavigate();
-    
+    const { pathname } = useLocation();
+
     const [openNav, setOpenNav] = useState(false);
     const [show, setShow] = useState(false);
     // const [showDropDown, setShowDropDown] = useState(false);
@@ -116,7 +117,7 @@ const Header = () => {
     );
 
     return (
-        <Box className={show ?`${navbarStyling} bg-white text-black`: `${navbarStyling} bg-black text-white`}>
+        <Box className={show || pathname != "/" ? `${navbarStyling} bg-white text-black` : `${navbarStyling} bg-black text-white`}>
             <div className="mx-3 h-10 flex items-center justify-between py-8">
                 {/* Logo */}
                 <Link className="mr-4" to="/">
