@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Box } from '@chakra-ui/react';
 
-const CustomButton = ({ children, handleClick, variant, width, ...rest }) => {
+const CustomButton = ({ children, text, variant, width, ...rest }) => {
 
     return (
         <Box
@@ -16,22 +16,22 @@ const CustomButton = ({ children, handleClick, variant, width, ...rest }) => {
             _active={{
                 transform: 'scale(0.98)',
             }}
-            onClick={handleClick}
             {...rest}
-            className={`rounded-md shadow-secondary_color shadow-md ${variant === "solid" ?
+            className={`rounded-md shadow-secondary_color shadow-md hover:scale-105 transition-all ${variant === "solid" ?
                 `bg-primary_color text-secondary_color` :
                 variant === "outline" &&
                 `bg-white text-primary_color border-2 border-primary_color`}`}
         >
             <Box className='flex gap-2 justify-center'>
-                {children}
+                {children || text}
             </Box>
         </Box>
     )
 }
 
 CustomButton.propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.element,
+    text: PropTypes.string,
     handleClick: PropTypes.func,
     leftIcon: PropTypes.element,
     rightIcon: PropTypes.element,
