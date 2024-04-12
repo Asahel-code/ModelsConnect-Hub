@@ -7,9 +7,8 @@ const AboutUs = () => {
   return (
     <div className="my-10">
       <div className="grid grid-cols-2 gap-8 mx-10 md:mx-20">
-        <div className="image">
-          <div className="shape bg-gradient-to-tr from-secondary_color to-primary_color"></div>
-          <img src={aboutImg1} alt="about start img" />
+        <div className="h-96 flex justify-center">
+          <img className="h-full" src={aboutImg1} alt="about start img" />
         </div>
         <div className="flex justify-center items-center">
           <div>
@@ -61,7 +60,7 @@ Service.propTypes = {
   icon: PropTypes.element,
   title: PropTypes.string,
   description: PropTypes.string,
-  
+
 }
 
 const ourServices = [
