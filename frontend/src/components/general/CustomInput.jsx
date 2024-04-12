@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
-import { Box, Center, Select } from "@chakra-ui/react";
+import { Box, Center, Select, Textarea } from "@chakra-ui/react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import KenyaFlag from '../../assets/svg/KenyaFlag';
 
 const CustomInput = ({
     icon,
     placeholder = "Search...",
     type = "text",
-    value,
-    handleChange,
     name,
     width,
     handleEyeClick,
-    isDisabled
+    isDisabled,
+    ...rest
 }) => {
     return (
         <Box
@@ -22,19 +22,20 @@ const CustomInput = ({
             borderWidth={"1px"}
             overflow={"hidden"}
             borderRadius={"md"}
-            borderColor={isDisabled ? "#EBEEF3" : "#05A3FF"}
-            width={width ? width : "350px"}
+            borderColor={"#EBEEF3"}
+            px={"2"}
+            fontSize={"sm"}
+            width={width ? width : "full"}
         >
-            {icon}
+            {name === "phoneNumber" ? <KenyaFlag /> : icon}
 
             <input
                 placeholder={placeholder}
-                className={`px-1 border-0 outline-none focus:outline-none h-10 flex-grow ${isDisabled && `text-[#A5A7AD]`}`}
+                className={`px-1 border-0 outline-none focus:outline-none h-10 flex-grow text-sm`}
                 type={type}
-                value={value}
-                onChange={handleChange}
                 name={name}
                 disabled={isDisabled}
+                {...rest}
             />
             {(name === "passwordConfirmation" || name === "password") && (
                 <Center
@@ -50,9 +51,9 @@ const CustomInput = ({
                     }}
                 >
                     {type === "password" ? (
-                        <AiFillEye className="text-2xl text-[#05A3FF]" />
+                        <AiFillEyeInvisible className="text-2xl text-secondary_color" />
                     ) : (
-                        <AiFillEyeInvisible className="text-2xl text-[#05A3FF]" />
+                        <AiFillEye className="text-2xl text-secondary_color" />
                     )}
                 </Center>
             )}
@@ -62,24 +63,23 @@ const CustomInput = ({
 
 export const CustomSelect = ({
     placeholder,
-    value,
-    handleChange,
     name,
     width,
-    height,
     children,
+    ...rest
 }) => {
     return (
         <Box
             display={"flex"}
             gap={"3"}
             alignItems={"center"}
-            width={width ? width : "350px"}
+            width={width ? width : "full"}
             borderWidth={"1px"}
             overflow={"hidden"}
-            height={height ? height : "full"}
+            height={"10"}
             borderRadius={"md"}
-            borderColor={"#05A3FF"}
+            fontSize={"sm"}
+            borderColor={"#EBEEF3"}
         >
             <Select
                 variant='unstyled'
@@ -87,12 +87,11 @@ export const CustomSelect = ({
                 borderWidth={0}
                 width={"full"}
                 bg={"white"}
-                height={"40px"}
+                fontSize={"small"}
                 my={"0"}
-                mx={"1"}
-                onChange={handleChange}
-                value={value}
+                mx={"2"}
                 name={name}
+                {...rest}
             >
                 {children}
             </Select>
@@ -100,22 +99,41 @@ export const CustomSelect = ({
     );
 }
 
+export const CustomTextArea = ({
+    placeholder,
+    name,
+    ...rest
+}) => {
+    return (
+        <Textarea
+            fontSize={"medium"}
+            placeholder={placeholder}
+            focusBorderColor={"#EBEEF3"}
+            resize={'vertical'}
+            size={'lg'}
+            px={"3"}
+            name={name}
+            {...rest}
+        />
+    )
+}
+
+CustomTextArea.propTypes = {
+    placeholder: PropTypes.string,
+    name: PropTypes.string,
+}
+
 CustomSelect.propTypes = {
     placeholder: PropTypes.string,
-    value: PropTypes.any,
-    handleChange: PropTypes.func,
     name: PropTypes.string,
     children: PropTypes.node,
     width: PropTypes.string,
-    height: PropTypes.string,
 }
 
 CustomInput.propTypes = {
     icon: PropTypes.element,
     placeholder: PropTypes.string,
     type: PropTypes.string,
-    value: PropTypes.any,
-    handleChange: PropTypes.func,
     name: PropTypes.string,
     width: PropTypes.string,
     handleEyeClick: PropTypes.func,
