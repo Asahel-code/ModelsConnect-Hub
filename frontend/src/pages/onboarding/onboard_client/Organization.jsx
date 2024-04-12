@@ -1,0 +1,66 @@
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { FormControl, FormLabel } from "@chakra-ui/react";
+import Navigator from "../../../components/onboarding/Navigator";
+import CustomInput, { CustomSelect } from "../../../components/general/CustomInput";
+import CustomFileInput from "../../../components/general/CustomFileInput";
+
+const Organization = ({ currentStep, setCurrentStep }) => {
+
+    const [cr12FileName, setCr12FileName] = useState("Upload your business certificate");
+    return (
+        <div>
+            <div className="px-8">
+                <Navigator
+                    text={"Fill in details"}
+                    currentStep={currentStep}
+                    setCurrentStep={setCurrentStep}
+                />
+            </div>
+            <div className="py-4 px-8 border-b border-gray-300">
+                <FormControl isRequired>
+                    <FormLabel fontSize={"sm"}>Organization name</FormLabel>
+                    <CustomInput
+                        placeholder="Enter organization name"
+                        name="firstName"
+                    />
+                </FormControl>
+                <div className="grid grid-cols-2 gap-4 mt-5">
+                    <FormControl isRequired>
+                        <FormLabel fontSize={"sm"}>County</FormLabel>
+                        <CustomSelect
+                            placeholder={"Select county"}
+                            name={"county"}
+                        >
+                            <option value="Nairobi">Nairobi</option>
+                        </CustomSelect>
+                    </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel fontSize={"sm"}>City</FormLabel>
+                        <CustomInput
+                            placeholder="Enter your city"
+                            name="city"
+                        />
+                    </FormControl>
+                </div>
+            </div>
+            <div className="py-4 px-8">
+                <FormControl isRequired>
+                    <FormLabel fontSize={"sm"}>CR12 certificate</FormLabel>
+                    <CustomFileInput
+                        placeholder={cr12FileName}
+                        name="cr12"
+                        onChange={({ target: { files } }) => files[0] && setCr12FileName(files[0].name)}
+                    />
+                </FormControl>
+            </div>
+        </div>
+    )
+}
+
+Organization.propTypes = {
+    currentStep: PropTypes.number,
+    setCurrentStep: PropTypes.func,
+}
+
+export default Organization
