@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom"
 import OnboardingLayout from "../../components/layouts/OnboardingLayout"
 
-const Onboarding = () => {
+const OnboardingPages = () => {
     return (
         <OnboardingLayout>
             <Outlet />
@@ -10,4 +10,4 @@ const Onboarding = () => {
     )
 }
 
-export default Onboarding
+export default OnboardingPages

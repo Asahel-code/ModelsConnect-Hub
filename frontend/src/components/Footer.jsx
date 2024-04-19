@@ -77,7 +77,6 @@ const FooterSection = () => {
                                     <div className="flex flex-col gap-1">
                                         <p className="text-sm">Mountain Mall, Thika road</p>
                                     </div>
-
                                 </div>
                                 <div className="flex gap-2 text-gray-200">
                                     <h6 className="font-semibold">Mobile#</h6>

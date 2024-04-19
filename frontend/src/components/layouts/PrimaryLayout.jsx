@@ -9,7 +9,7 @@ const PrimaryLayout = ({ children }) => {
     return (
         <>
             <Header />
-            <div className={pathname != "/" && "mt-20"}>
+            <div className={pathname != "/" ? "mt-20": ""}>
                 {children}
             </div>
             <Footer />
