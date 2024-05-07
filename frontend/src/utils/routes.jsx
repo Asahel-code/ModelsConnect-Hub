@@ -13,7 +13,12 @@ import OnboardClient from "../pages/onboard_pages/onboard_client";
 import OnboardModel from "../pages/onboard_pages/onboard_model";
 import ModelHome from "../pages/model_pages/model_home";
 import ModelGallery from "../pages/model_pages/model_gallery";
-import Profile from "../pages/model_pages/profile";
+import ModelProfile from "../pages/model_pages/model_profile";
+import ClientHome from "../pages/client_pages/client_home";
+import ClientProfile from "../pages/client_pages/client_profile";
+import ViewModel from "../pages/client_pages/client_home/view/ViewModel";
+import ClientContract from "../pages/client_pages/client_contract";
+import ViewAssignedModels from "../pages/client_pages/client_contract/view/ViewAssignedModels";
 
 
 export const PrimaryRoutes = [
@@ -77,6 +82,29 @@ export const ModelRoutes = [
     },
     {
         path: "profile",
-        element: <Profile />
+        element: <ModelProfile />
+    },
+]
+
+export const ClientRoutes = [
+    {
+        path: "",
+        element: <ClientHome />
+    },
+    {
+        path: "home/:id",
+        element: <ViewModel />
+    },
+    {
+        path: "contracts",
+        element: <ClientContract />
+    },
+    {
+        path: "contracts/:id",
+        element: <ViewAssignedModels />
+    },
+    {
+        path: "profile",
+        element: <ClientProfile />
     },
 ]

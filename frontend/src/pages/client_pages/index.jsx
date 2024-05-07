@@ -4,7 +4,9 @@ import ClientLayout from '../../components/layouts/ClientLayout';
 const ClientPages = () => {
     return (
         <ClientLayout>
-            <Outlet />
+            <div className="max-h-[91%] overflow-y-scroll p-3">
+                <Outlet />
+            </div>
         </ClientLayout>
     );
 }

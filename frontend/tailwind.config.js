@@ -11,7 +11,7 @@ export default {
         primary_color_light: "#FCDCA9",
         secondary_color: "#454449",
         primary_red: "#FA0F0F",
-        primary_green: "#05F77A",
+        primary_green: "#028943",
         primary_yellow: "#FFA100",
         primary_blue: "#00AEFF",
         primary_red_light: "#FFBFBF",
