@@ -6,8 +6,7 @@ const ClientPages = () => {
         <ClientLayout>
             <Outlet />
         </ClientLayout>
-
-    )
+    );
 }
 
 export default ClientPages

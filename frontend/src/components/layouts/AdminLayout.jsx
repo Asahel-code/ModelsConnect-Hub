@@ -1,18 +1,11 @@
 import PropTypes from 'prop-types';
-import { useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import SideNav from '../SideNav';
 import TopNav from '../TopNav';
-import Helmet from '../general/Helmet';
-import useUserStore from "../../utils/zustand/Store";
-import { toastProps } from '../../utils/toastProps';
-import { useNavigate } from "react-router-dom";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { FaRegUser } from "react-icons/fa";
 
 const AdminLayout = ({ children }) => {
-
-  const toast = useToast();
-  const navigate = useNavigate();
-  const removeToken = useUserStore((state) => state.removeToken);
 
   const [showSideBar, setShowSideBar] = useState(true);
 
@@ -20,29 +13,41 @@ const AdminLayout = ({ children }) => {
     setShowSideBar((prev) => !prev);
   };
 
-  const logout = () => {
-    removeToken();
-    toast({
-      ...toastProps,
-      title: "Success",
-      description: "Admin logged out successfully",
-      status: "success",
-    });
-    navigate("/");
-  }
+  const topNavLinks = [
+    {
+      name: "profile",
+      to: "/admin/profile",
+    }
+  ];
+
+  const sideNavLinks = [
+    {
+      name: "Dashboard",
+      to: "/admin/dashboard",
+      icon: <LuLayoutDashboard />
+    },
+    {
+      name: "Models",
+      to: "/admin/models",
+      icon: <FaRegUser />
+    },
+    {
+      name: "Clients",
+      to: "/admin/clients",
+      icon: <FaRegUser />
+    }
+  ]
+
 
   return (
-    <Helmet title="Admin Dashboard">
-      <div className="flex flex-row h-screen bg-gray-100">
-        <SideNav show={showSideBar} logout={logout} />
+    <div className="flex flex-row h-screen bg-gray-100">
+      <SideNav show={showSideBar} links={sideNavLinks} />
 
-        <div className="min-h-full w-[100%]">
-          <TopNav toggleSideBar={handleToggle} logout={logout} />
-          {children}
-        </div>
+      <div className="min-h-full w-[100%]">
+        <TopNav toggleSideBar={handleToggle} links={topNavLinks} />
+        {children}
       </div>
-    </Helmet>
-
+    </div>
   )
 }
 

@@ -8,8 +8,6 @@ const UploadPhotos = ({ currentStep, setCurrentStep }) => {
 
     const [images, setImages] = useState([]);
 
-    console.log(images)
-
     return (
         <div className='px-8'>
             <Navigator

@@ -1,23 +1,39 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Box, Text } from "@chakra-ui/react";
-import { HiBars3 } from "react-icons/hi2";
-import { RiArrowDropDownLine } from "react-icons/ri";
+import { Box, Text, useToast } from "@chakra-ui/react";
+import { HiMiniBars3BottomLeft } from "react-icons/hi2";
+import { FaCaretDown } from "react-icons/fa";
 import useUserStore from "../utils/zustand/Store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toastProps } from '../utils/toastProps';
 
-const TopNav = ({ toggleSideBar, logout }) => {
+const TopNav = ({ toggleSideBar, links }) => {
 
-    const [showAdminDropDown, setShowAdminDropDown] = useState(false);
+    const toast = useToast();
+    const navigate = useNavigate();
+
+    const [showDropDown, setShowDropDown] = useState(false);
+    const removeToken = useUserStore((state) => state.removeToken);
     const user = useUserStore((state) => state.user);
 
+    const logout = () => {
+        removeToken();
+        toast({
+            ...toastProps,
+            title: "Success",
+            description: "Logged out successfully",
+            status: "success",
+        });
+        navigate("/");
+    }
+
     return (
-        <div className="h-[60px] bg-primary_color_light flex justify-between">
+        <div className="py-2 bg-white flex justify-between">
             <button
-                className={"hover:text-primary_color p-1 rounded-md focus:outline-none"}
-                onClick={toggleSideBar}
+                className={"hover:text-black p-1 rounded-md focus:outline-none"}
+                onClick={() => toggleSideBar()}
             >
-                <HiBars3 className="text-3xl" />
+                <HiMiniBars3BottomLeft className="text-3xl" />
             </button>
 
             <div className="flex items-center gap-2">
@@ -27,29 +43,33 @@ const TopNav = ({ toggleSideBar, logout }) => {
                     }
                 >
                 </button>
-                <Box
-                    className="relative"
-                    onMouseEnter={() => setShowAdminDropDown(true)}
-                    onMouseLeave={() => setShowAdminDropDown(false)}
-                >
-                    <Box display={"flex"} gap={0.5} alignItems={"center"} >
-                        <Text className="text-md">Hi, <span className="text-primary_color font-semibold text-lg">{user?.username}</span></Text>
-                        <RiArrowDropDownLine className="text-4xl" />
+                <Box className="relative">
+                    <Box display={"flex"} gap={4} alignItems={"center"}>
+                        <div className="flex items-center gap-4">
+                            <div className="h-9 w-9 bg-secondary_color rounded-full flex justify-center items-center">
+                                <span className="uppercase text-md  font-[1000] text-faded_yellow">PL</span>
+                            </div>
+                            <Text className="text-md">Hi, <span className="text-primary_color font-semibold text-lg">{user?.username}</span></Text>
+                        </div>
+                        <button onClick={() => (setShowDropDown((prev) => (!prev)))}>
+                        <FaCaretDown className="text-xl" />
+                        </button>
+
                     </Box>
-                    {showAdminDropDown && (
-                        <Box boxShadow='sm' rounded='md' bg='white' className="absolute w-[120px] lg:right-2">
-                            {user?.isLandLord && (
-                                <Box>
-                                    <Link to="/landlord/profile">
-                                        <Box className="px-4 py-2 hover:bg-gray-100 hover:text-primary_color hover:font-medium text-md">
-                                            Profile
+                    {showDropDown && (
+                        <Box boxShadow='sm' bg='white' textColor={"black"} className="absolute w-[120px] lg:right-2">
+                            <Box>
+                                {links.map((link, index) => (
+                                    <Link key={index} to={link.to}>
+                                        <Box className="px-4 py-2 hover:bg-gray-100 hover:text-primary_color hover:font-medium text-sm capitalize">
+                                            {link.name}
                                         </Box>
                                     </Link>
-                                </Box>
-                            )}
+                                ))}
+                            </Box>
                             <Box
                                 cursor={"pointer"}
-                                className="px-4 py-2 hover:text-primary_color hover:bg-gray-100 text-md border-t-2 font-bold"
+                                className="px-4 py-2 hover:text-primary_color hover:bg-gray-100 text-sm border-t font-bold"
                                 onClick={() => logout()}
                             >
                                 logout
@@ -64,8 +84,7 @@ const TopNav = ({ toggleSideBar, logout }) => {
 
 TopNav.propTypes = {
     toggleSideBar: PropTypes.func.isRequired,
-    logout: PropTypes.func.isRequired,
+    links: PropTypes.array.isRequired
 }
-
 
 export default TopNav;

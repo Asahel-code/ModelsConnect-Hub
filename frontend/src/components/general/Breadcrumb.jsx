@@ -2,17 +2,20 @@ import PropTypes from 'prop-types';
 
 const Breadcrumb = ({ title, icon, subtitle }) => {
     return (
-        <div className="flex items-center gap-2">
-            <div className="bg-primary_color_light p-2 text-2xl">
+        <div className="flex items-center gap-1 text-gray-600">
+            <div className="text-lg">
                 {icon}
             </div>
+            <div className='text-sm'>
+                {"->"}
+            </div>
             <div className="flex items-end">
-                <p className="font-semibold text-xl">
+                <p className="text-sm">
                     {title}
                 </p>
                 &nbsp;
                 {subtitle && (
-                    <p className="text-lg capitalize">
+                    <p className="text-sm">
                         {subtitle}
                     </p>
                 )}
@@ -22,8 +25,8 @@ const Breadcrumb = ({ title, icon, subtitle }) => {
 }
 
 Breadcrumb.propTypes = {
-    title: PropTypes.string.isRequired, 
-    icon: PropTypes.element.isRequired, 
+    title: PropTypes.string.isRequired,
+    icon: PropTypes.element.isRequired,
     subtitle: PropTypes.string
 }
 

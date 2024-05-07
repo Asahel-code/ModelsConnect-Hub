@@ -3,14 +3,17 @@ import AboutUs from "../pages/primary_pages/about_us";
 import Contact from "../pages/primary_pages/contact";
 import Home from "../pages/primary_pages/home";
 
-import Login from "../pages/auth/login";
-import Signup from "../pages/auth/signup";
-import VerifyPhoneNumber from "../pages/auth/verify_phone_number";
-import ForgotPassword from "../pages/auth/forgot_password";
-import ResetPassword from "../pages/auth/reset_password";
+import Login from "../pages/auth_pages/login";
+import Signup from "../pages/auth_pages/signup";
+import VerifyPhoneNumber from "../pages/auth_pages/verify_phone_number";
+import ForgotPassword from "../pages/auth_pages/forgot_password";
+import ResetPassword from "../pages/auth_pages/reset_password";
 
-import OnboardClient from "../pages/onboarding/onboard_client";
-import OnboardModel from "../pages/onboarding/onboard_model";
+import OnboardClient from "../pages/onboard_pages/onboard_client";
+import OnboardModel from "../pages/onboard_pages/onboard_model";
+import ModelHome from "../pages/model_pages/model_home";
+import ModelGallery from "../pages/model_pages/model_gallery";
+import Profile from "../pages/model_pages/profile";
 
 
 export const PrimaryRoutes = [
@@ -59,5 +62,21 @@ export const OnboardingRoutes = [
     {
         path: "model",
         element: <OnboardModel />
+    },
+]
+
+
+export const ModelRoutes = [
+    {
+        path: "",
+        element: <ModelHome />
+    },
+    {
+        path: "gallery",
+        element: <ModelGallery />
+    },
+    {
+        path: "profile",
+        element: <Profile />
     },
 ]
