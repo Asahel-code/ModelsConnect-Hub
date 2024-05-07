@@ -8,6 +8,7 @@ import { RiGalleryView } from "react-icons/ri";
 const ModelLayout = ({ children }) => {
 
   const [showSideBar, setShowSideBar] = useState(true);
+  const [current, setCurrent] = useState("home");
 
   const handleToggle = () => {
     setShowSideBar((prev) => !prev);
@@ -23,7 +24,7 @@ const ModelLayout = ({ children }) => {
   const sideNavLinks = [
     {
       name: "Home",
-      to: "/model/home",
+      to: "/model",
       icon: <MdOutlineHome />
     },
     {
@@ -35,7 +36,12 @@ const ModelLayout = ({ children }) => {
 
   return (
     <div className="flex flex-row h-screen bg-gray-100">
-      <SideNav show={showSideBar} links={sideNavLinks} />
+      <SideNav
+        show={showSideBar}
+        links={sideNavLinks}
+        current={current}
+        setCurrent={setCurrent}
+      />
 
       <div className="min-h-full w-full">
         <TopNav toggleSideBar={handleToggle} links={topNavLinks} />

@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
-import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
-const SideNav = ({ show, links }) => {
+const SideNav = ({ show, links, current, setCurrent }) => {
     const navigate = useNavigate();
-    const [current, setCurrent] = useState("");
 
     const handleCurrent = (selected, to) => {
         setCurrent(selected.toLowerCase());
@@ -39,7 +37,9 @@ const SideNav = ({ show, links }) => {
 
 SideNav.propTypes = {
     show: PropTypes.bool.isRequired,
-    links: PropTypes.array.isRequired
+    links: PropTypes.array.isRequired,
+    current: PropTypes.string.isRequired,
+    setCurrent: PropTypes.func.isRequired
 }
 
 

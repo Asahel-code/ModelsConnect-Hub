@@ -12,6 +12,8 @@ import ResetPassword from "../pages/auth_pages/reset_password";
 import OnboardClient from "../pages/onboard_pages/onboard_client";
 import OnboardModel from "../pages/onboard_pages/onboard_model";
 import ModelHome from "../pages/model_pages/model_home";
+import ModelGallery from "../pages/model_pages/model_gallery";
+import Profile from "../pages/model_pages/profile";
 
 
 export const PrimaryRoutes = [
@@ -68,5 +70,13 @@ export const ModelRoutes = [
     {
         path: "",
         element: <ModelHome />
+    },
+    {
+        path: "gallery",
+        element: <ModelGallery />
+    },
+    {
+        path: "profile",
+        element: <Profile />
     },
 ]

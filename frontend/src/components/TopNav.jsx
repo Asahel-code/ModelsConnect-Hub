@@ -46,8 +46,8 @@ const TopNav = ({ toggleSideBar, links }) => {
                 <Box className="relative">
                     <Box display={"flex"} gap={4} alignItems={"center"}>
                         <div className="flex items-center gap-4">
-                            <div className="w-fit  p-1 bg-secondary_color rounded-full">
-                                <span className="uppercase text-2xl tracking-wide font-[1000]  text-faded_yellow">PL</span>
+                            <div className="h-9 w-9 bg-secondary_color rounded-full flex justify-center items-center">
+                                <span className="uppercase text-md  font-[1000] text-faded_yellow">PL</span>
                             </div>
                             <Text className="text-md">Hi, <span className="text-primary_color font-semibold text-lg">{user?.username}</span></Text>
                         </div>
@@ -61,7 +61,7 @@ const TopNav = ({ toggleSideBar, links }) => {
                             <Box>
                                 {links.map((link, index) => (
                                     <Link key={index} to={link.to}>
-                                        <Box className="px-4 py-2 hover:bg-gray-100 hover:text-primary_color hover:font-medium text-md capitalize">
+                                        <Box className="px-4 py-2 hover:bg-gray-100 hover:text-primary_color hover:font-medium text-sm capitalize">
                                             {link.name}
                                         </Box>
                                     </Link>
@@ -69,7 +69,7 @@ const TopNav = ({ toggleSideBar, links }) => {
                             </Box>
                             <Box
                                 cursor={"pointer"}
-                                className="px-4 py-2 hover:text-primary_color hover:bg-gray-100 text-md border-t font-bold"
+                                className="px-4 py-2 hover:text-primary_color hover:bg-gray-100 text-sm border-t font-bold"
                                 onClick={() => logout()}
                             >
                                 logout
