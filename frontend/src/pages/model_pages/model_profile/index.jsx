@@ -5,7 +5,7 @@ import { useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import CustomButton from "../../../components/general/CustomButton";
 
-const Profile = () => {
+const ModelProfile = () => {
 
     const [passwordType, setPasswordType] = useState("password");
     return (
@@ -67,4 +67,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default ModelProfile

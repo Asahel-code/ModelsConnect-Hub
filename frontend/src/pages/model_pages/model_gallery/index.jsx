@@ -47,12 +47,13 @@ const ModelGallery = () => {
 
 export default ModelGallery
 
-const ImageView = ({ src }) => (
-    <div className="w-full h-72">
+export const ImageView = ({ src, className, ...rest }) => (
+    <div className={`w-full h-72 ${className}`} {...rest}>
         <img src={src} alt={"img"} className="object-cover h-full w-full rounded-lg" />
     </div>
 );
 
 ImageView.propTypes = {
-    src: PropTypes.string
+    src: PropTypes.string,
+    className: PropTypes.string,
 }
