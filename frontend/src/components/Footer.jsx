@@ -14,10 +14,6 @@ const FooterSection = () => {
             display: "About us",
             path: "/about",
         },
-        {
-            display: "Contact us",
-            path: "/contact",
-        },
     ];
 
 
