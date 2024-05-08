@@ -4,10 +4,12 @@ import SideNav from '../SideNav';
 import TopNav from '../TopNav';
 import { LuLayoutDashboard } from "react-icons/lu";
 import { FaRegUser } from "react-icons/fa";
+import { MdWorkOutline } from "react-icons/md";
 
 const AdminLayout = ({ children }) => {
 
   const [showSideBar, setShowSideBar] = useState(true);
+  const [current, setCurrent] = useState("dashboard");
 
   const handleToggle = () => {
     setShowSideBar((prev) => !prev);
@@ -23,7 +25,7 @@ const AdminLayout = ({ children }) => {
   const sideNavLinks = [
     {
       name: "Dashboard",
-      to: "/admin/dashboard",
+      to: "/admin",
       icon: <LuLayoutDashboard />
     },
     {
@@ -35,13 +37,23 @@ const AdminLayout = ({ children }) => {
       name: "Clients",
       to: "/admin/clients",
       icon: <FaRegUser />
+    },
+    {
+      name: "Jobs",
+      to: "/admin/jobs",
+      icon: <MdWorkOutline />
     }
   ]
 
 
   return (
     <div className="flex flex-row h-screen bg-gray-100">
-      <SideNav show={showSideBar} links={sideNavLinks} />
+      <SideNav
+        show={showSideBar}
+        links={sideNavLinks}
+        current={current}
+        setCurrent={setCurrent}
+      />
 
       <div className="min-h-full w-[100%]">
         <TopNav toggleSideBar={handleToggle} links={topNavLinks} />

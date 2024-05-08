@@ -35,61 +35,61 @@ const ConfirmDeleteModal = ({
                         handleCancel={() => setIsDeleteModalOpen(false)}
                         handleConfirm={handleDelete}
                         confirmTxt={confirmTxt}
+                        record={record}
                     />
                 }
             >
                 <div className={"flex flex-col items-center"}>
                     {/*    icon  */}
-                    <div
-                        className={
-                            "h-16 w-16 rounded-full flex items-center justify-center bg-primary_red_light"
-                        }
-                    >
-                        <RiDeleteBin6Line className="text-3xl text-primary_red" />
-                    </div>
+                    {record?.status ? (
+                        null
+                    ) : (
+                        <div
+                            className={
+                                `h-16 w-16 rounded-full flex items-center justify-center bg-primary_red_light`
+                            }
+                        >
+                            <RiDeleteBin6Line className="text-3xl text-primary_red" />u
+                        </div>
+                    )}
 
                     <div className={"py-3 text-center"}>
                         <h5 className={"text-xl font-semibold"}>
-                            {title ? title : " Do you want to delete this item?"}
+                            {title ? title : "Do you want to delete this item?"}
                         </h5>
-                        {subTxt ? (
+                        {subTxt && (
                             subTxt
-                        ) : (
-                            <p
-                                className={"text-sm font-medium text-gray-500 text-center mt-1"}
-                            >
-                                Are you sure you want to delete item?
-                                <br /> This action is irreversible
-                            </p>
                         )}
                     </div>
                 </div>
-            </Modal>
+            </Modal >
         </>
     );
 };
 
 export default ConfirmDeleteModal;
 
-const ModalFooter = ({ handleCancel, handleConfirm, confirmTxt }) => (
-    <div className={"flex font-inter text-sm w-full gap-3 px-5"}>
-        {/*    cancel button*/}
-        <button
-            className={"flex-1 h-11 bg-gray-100 text-black rounded-full"}
-            onClick={handleCancel}
-        >
-            Cancel
-        </button>
+const ModalFooter = ({ handleCancel, handleConfirm, confirmTxt, record }) => {
+    return (
+        <div className={"flex font-inter text-sm w-full gap-3 px-5"}>
+            {/*    cancel button*/}
+            <button
+                className={"flex-1 h-11 bg-gray-100 text-black rounded-full"}
+                onClick={handleCancel}
+            >
+                Cancel
+            </button>
 
-        {/*    submit button*/}
-        <button
-            className={"flex-1 h-11 bg-primary_red text-white rounded-full"}
-            onClick={handleConfirm}
-        >
-            {confirmTxt}
-        </button>
-    </div>
-);
+            {/*    submit button*/}
+            <button
+                className={`flex-1 h-11 ${(record?.status === "inactive" || record?.status === "pending") ? "bg-primary_green" : "bg-primary_red"} text-white rounded-full`}
+                onClick={handleConfirm}
+            >
+                {confirmTxt}
+            </button>
+        </div>
+    )
+};
 
 ConfirmDeleteModal.propTypes = {
     btnTxt: PropTypes.string,
@@ -105,8 +105,9 @@ ConfirmDeleteModal.propTypes = {
 }
 
 ModalFooter.propTypes = {
-    handleCancel: PropTypes.func, 
-    handleConfirm: PropTypes.func, 
-    confirmTxt: PropTypes.string
+    handleCancel: PropTypes.func,
+    handleConfirm: PropTypes.func,
+    confirmTxt: PropTypes.string,
+    record: PropTypes.object,
 }
 

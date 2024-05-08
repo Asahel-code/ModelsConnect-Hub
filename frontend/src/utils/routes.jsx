@@ -1,6 +1,5 @@
 
 import AboutUs from "../pages/primary_pages/about_us";
-import Contact from "../pages/primary_pages/contact";
 import Home from "../pages/primary_pages/home";
 
 import Login from "../pages/auth_pages/login";
@@ -11,14 +10,22 @@ import ResetPassword from "../pages/auth_pages/reset_password";
 
 import OnboardClient from "../pages/onboard_pages/onboard_client";
 import OnboardModel from "../pages/onboard_pages/onboard_model";
+
 import ModelHome from "../pages/model_pages/model_home";
 import ModelGallery from "../pages/model_pages/model_gallery";
 import ModelProfile from "../pages/model_pages/model_profile";
+
 import ClientHome from "../pages/client_pages/client_home";
 import ClientProfile from "../pages/client_pages/client_profile";
 import ViewModel from "../pages/client_pages/client_home/view/ViewModel";
 import ClientContract from "../pages/client_pages/client_contract";
 import ViewAssignedModels from "../pages/client_pages/client_contract/view/ViewAssignedModels";
+
+import Dashboard from "../pages/admin_pages/dashboard_page";
+import AdminProfile from "../pages/admin_pages/admin_profile";
+import ModelsList from "../pages/admin_pages/admin_models_list";
+import ClientsList from "../pages/admin_pages/admin_clients_list";
+import JobsList from "../pages/admin_pages/admin_jobs_list";
 
 
 export const PrimaryRoutes = [
@@ -30,10 +37,6 @@ export const PrimaryRoutes = [
         path: "/about",
         element: <AboutUs />
     },
-    {
-        path: "/contact",
-        element: <Contact />
-    }
 ];
 
 export const AuthRoutes = [
@@ -57,7 +60,7 @@ export const AuthRoutes = [
         path: "/reset_password",
         element: <ResetPassword />
     },
-]
+];
 
 export const OnboardingRoutes = [
     {
@@ -68,7 +71,7 @@ export const OnboardingRoutes = [
         path: "model",
         element: <OnboardModel />
     },
-]
+];
 
 
 export const ModelRoutes = [
@@ -84,7 +87,7 @@ export const ModelRoutes = [
         path: "profile",
         element: <ModelProfile />
     },
-]
+];
 
 export const ClientRoutes = [
     {
@@ -106,5 +109,28 @@ export const ClientRoutes = [
     {
         path: "profile",
         element: <ClientProfile />
+    },
+];
+
+export const AdminRoutes = [
+    {
+        path: "",
+        element: <Dashboard />
+    },
+    {
+        path: "models",
+        element: <ModelsList />
+    },
+    {
+        path: "clients",
+        element: <ClientsList />
+    },
+    {
+        path: "jobs",
+        element: <JobsList />
+    },
+    {
+        path: "profile",
+        element: <AdminProfile />
     },
 ]

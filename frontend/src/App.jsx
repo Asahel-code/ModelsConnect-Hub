@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthRoutes, ClientRoutes, ModelRoutes, OnboardingRoutes, PrimaryRoutes } from "./utils/routes";
+import { AdminRoutes, AuthRoutes, ClientRoutes, ModelRoutes, OnboardingRoutes, PrimaryRoutes } from "./utils/routes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Aos from "aos";
 import "aos/dist/aos.css"
@@ -9,6 +9,7 @@ import { ConfigProvider } from 'antd';
 import OnboardingPages from "./pages/onboard_pages";
 import ModelPages from "./pages/model_pages";
 import ClientPages from "./pages/client_pages";
+import AdminPages from "./pages/admin_pages";
 
 function App() {
 
@@ -50,6 +51,11 @@ function App() {
               </Route>
               <Route path="/client" element={<ClientPages />}>
                 {ClientRoutes.map((r, index) => (
+                  <Route key={index} path={r?.path} element={r?.element} />
+                ))}
+              </Route>
+              <Route path="/admin" element={<AdminPages />}>
+                {AdminRoutes.map((r, index) => (
                   <Route key={index} path={r?.path} element={r?.element} />
                 ))}
               </Route>
