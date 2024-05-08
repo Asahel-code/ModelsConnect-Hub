@@ -1,13 +1,10 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 import { FormControl, FormLabel } from "@chakra-ui/react";
 import Navigator from "../../../components/onboarding/Navigator";
 import CustomInput, { CustomSelect } from "../../../components/general/CustomInput";
-import CustomFileInput from "../../../components/general/CustomFileInput";
 
 const Organization = ({ currentStep, setCurrentStep }) => {
 
-    const [cr12FileName, setCr12FileName] = useState("Upload your business certificate");
     return (
         <div>
             <div className="px-8">
@@ -17,7 +14,7 @@ const Organization = ({ currentStep, setCurrentStep }) => {
                     setCurrentStep={setCurrentStep}
                 />
             </div>
-            <div className="py-4 px-8 border-b border-gray-300">
+            <div className="py-4 px-8 border-gray-300">
                 <FormControl isRequired>
                     <FormLabel fontSize={"sm"}>Organization name</FormLabel>
                     <CustomInput
@@ -43,16 +40,6 @@ const Organization = ({ currentStep, setCurrentStep }) => {
                         />
                     </FormControl>
                 </div>
-            </div>
-            <div className="py-4 px-8">
-                <FormControl isRequired>
-                    <FormLabel fontSize={"sm"}>CR12 certificate</FormLabel>
-                    <CustomFileInput
-                        placeholder={cr12FileName}
-                        name="cr12"
-                        onChange={({ target: { files } }) => files[0] && setCr12FileName(files[0].name)}
-                    />
-                </FormControl>
             </div>
         </div>
     )

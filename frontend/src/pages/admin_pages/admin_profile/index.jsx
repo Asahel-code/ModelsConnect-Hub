@@ -1,10 +1,10 @@
 import Profile from "../../../components/general/Profile";
 
-const ClientProfile = () => {
+const AdminProfile = () => {
 
     return (
         <Profile/>
     )
 }
 
-export default ClientProfile
+export default AdminProfile

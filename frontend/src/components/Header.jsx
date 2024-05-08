@@ -40,10 +40,6 @@ const Header = () => {
             <Link to="/about" className="hover:text-primary_color hover:font-medium text-md">
                 About us
             </Link>
-
-            <Link to="/contact" className="hover:text-primary_color hover:font-medium text-md">
-                Contact us
-            </Link>
             <Box>
                 {/* {user?.token
                     ? (
