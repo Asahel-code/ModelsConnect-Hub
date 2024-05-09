@@ -5,10 +5,12 @@ const getModelsBooking = require('../../middleware/getModelsBooking');
 const verifyAuth = require('../../middleware/verifyAuth');
 const verifyAdminRole = require("../../middleware/verifyAdminRole");
 const verifyClientRole = require("../../middleware/verifyClientRole");
+const verifyModelRole = require("../../middleware/verifyModelRole");
 
 router.get('/', verifyAuth, verifyAdminRole, modelsBookingController.fetchAllModelBooking);
+router.get('/client', verifyAuth, verifyClientRole, modelsBookingController.fetchCLientModelsBooking);
+router.get('/model', verifyAuth, verifyModelRole, modelsBookingController.fetchModelModelsBooking);
 router.get('/:bookingId', verifyAuth, getModelsBooking, modelsBookingController.fetchSpecificModelsBooking);
-router.get('/cleint_models_booking', verifyAuth, verifyClientRole, modelsBookingController.fetchClientModelsBooking);
 router.post('/', verifyAuth, verifyClientRole, modelsBookingController.bookModels);
 router.delete('/:bookingId', verifyAuth, verifyClientRole, getModelsBooking, modelsBookingController.deleteModelsBooking);
 

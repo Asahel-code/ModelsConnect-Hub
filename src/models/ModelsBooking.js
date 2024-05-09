@@ -6,13 +6,12 @@ const modelsBookingSchema = new Schema(
     {
         startDate: { type: Date, required: true },
         endDate: { type: Date, required: true },
-        location: { type: String, required: true },
+        county: { type: String, required: true },
+        city: { type: String, required: true },
         description: { type: String, required: true },
         client: { type: Schema.Types.ObjectId, ref: 'Client', require: true },
         models: [
-            {
-                model: { type: Schema.Types.ObjectId, ref: 'Model', require: true },
-            }
+            { type: Schema.Types.ObjectId, ref: 'Model', require: true },
         ],
     },
     {

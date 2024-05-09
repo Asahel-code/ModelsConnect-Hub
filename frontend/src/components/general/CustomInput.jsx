@@ -72,6 +72,7 @@ export const CustomSelect = ({
         <Box
             display={"flex"}
             gap={"3"}
+            bg={"white"}
             alignItems={"center"}
             width={width ? width : "full"}
             borderWidth={"1px"}

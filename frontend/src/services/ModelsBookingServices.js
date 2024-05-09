@@ -20,13 +20,6 @@ const fetchSpecificModelsBooking = async (id) => {
     return res.data;
 }
 
-const fetchClientModelsBooking = async () => {
-    setAuthToken(AxiosUtility);
-    const res = await AxiosUtility.get(`/models_bookings/cleint_models_booking`);
-
-    return res.data;
-}
-
 const deleteModelsBooking = async (id) => {
     setAuthToken(AxiosUtility);
     const res = await AxiosUtility.delete(`/models_bookings/${id}`);
@@ -37,7 +30,6 @@ const deleteModelsBooking = async (id) => {
 const ModelsBookingServices = {
     fetchAllModelsBooking,
     fetchSpecificModelsBooking,
-    fetchClientModelsBooking,
     bookModels,
     deleteModelsBooking
 }

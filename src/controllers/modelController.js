@@ -1,7 +1,7 @@
 const Model = require('../models/Model');
 const { uploadToCloudinary } = require('../middleware/imageUpload');
 
-const fetchAllModel = async (res, req) => {
+const fetchAllModel = async (req, res) => {
     try {
         const models = await Model.find();
 
@@ -11,7 +11,24 @@ const fetchAllModel = async (res, req) => {
     }
 }
 
-const fetchSpecificModel = async (res, req) => {
+const fetchAllAvailableModel = async (req, res) => {
+    try {
+        const models = await Model.find();
+
+        let availableModels = [];
+
+        for(const model of models){
+            if(model.status === "active"){
+                availableModels.push(model);
+            }
+        }
+        return res.status(200).json(availableModels);
+    } catch (error) {
+        return res.status(error?.status || 500).json({ message: error?.message || error })
+    }
+}
+
+const fetchSpecificModel = async (req, res) => {
     try {
         return res.status(200).json(res.model);
     } catch (error) {
@@ -19,9 +36,9 @@ const fetchSpecificModel = async (res, req) => {
     }
 }
 
-const fetchModelProfile = async (res, req) => {
+const fetchModelProfile = async (req, res) => {
     try {
-        const modelProfile = await Model.find({ user: req.userId });
+        const modelProfile = await Model.findOne({ user: req.userId });
 
         return res.status(200).json(modelProfile);
     } catch (error) {
@@ -29,7 +46,7 @@ const fetchModelProfile = async (res, req) => {
     }
 }
 
-const addModelProfile = async (res, req) => {
+const addModelProfile = async (req, res) => {
     const { body } = req;
 
     let imagesArray = []
@@ -47,6 +64,8 @@ const addModelProfile = async (res, req) => {
 
     const newModel = new Model({
         name: body?.name,
+        county: body?.county,
+        city: body?.city,
         images: imagesArray,
         gender: body?.gender,
         height: body?.height,
@@ -63,27 +82,36 @@ const addModelProfile = async (res, req) => {
     }
 }
 
-const updateModelProfile = async (res, req) => {
+const updateModelProfile = async (req, res) => {
     const { body } = req;
 
-    res.model.name = body?.name;
-    res.model.gender = body?.gender;
-    res.model.height = body?.height;
-    res.model.skinColor = body?.skinColor;
+    const modelProfile = await Model.findOne({ user: req.userId });
+
+    modelProfile.name = body?.name;
+    modelProfile.county = body?.county;
+    modelProfile.city = body?.city;
+    modelProfile.gender = body?.gender;
+    modelProfile.height = body?.height;
+    modelProfile.skinColor = body?.skinColor;
 
     try {
-        await res.model.save();
+        await modelProfile.save();
 
-        return res.status(200).json({ message: `${body?.name}, your model profile has been updated successfully` });
+        return res.status(200).json({ message: `${modelProfile?.name}, your model profile has been updated successfully` });
     } catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error })
     }
 }
 
-const updateModelImages = async (res, req) => {
-    const { body } = req;
+const addModelImages = async (req, res) => {
+
+    const modelProfile = await Model.findOne({ user: req.userId });
 
     let imagesArray = []
+
+    for (const image of modelProfile.images) {
+        imagesArray.push(image);
+    }
 
     if (req?.files) {
         for (let i = 0; i < req?.files?.length; i++) {
@@ -96,61 +124,52 @@ const updateModelImages = async (res, req) => {
         }
     }
 
-    res.model.images = imagesArray;
+    modelProfile.images = imagesArray;
 
     try {
-        await res.model.save();
+        await modelProfile.save();
 
-        return res.status(200).json({ message: `${res.model.name}, your model images have been updated successfully` });
+        return res.status(200).json({ message: `${modelProfile.name}, your added more images successfully` });
     } catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error })
     }
 }
 
-const setModelInterview = async (res, req) => {
-    const { body } = req;
+const deleteModelImage = async (req, res) => {
 
-    res.model.isRecruited = "interview set";
+    const image = req.query.image;
 
+    const modelProfile = await Model.findOne({ user: req.userId });
     try {
-        await res.model.save();
+        await Model.findByIdAndUpdate(
+            modelProfile._id,
+            { $pull: { images: image } },
+            { new: true }
+        );
 
-        return res.status(200).json({ message: `Interview has been set` });
-    } catch (error) {
+        return res.status(204).json({ message: "Model deleted" });
+    }
+    catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error });
     }
+
 }
 
-const setModelAcceptance = async (res, req) => {
+const updateAccountStatus = async (req, res) => {
     const { body } = req;
 
-    res.model.isRecruited = "accepted";
+    res.model.status = body?.status;
 
     try {
         await res.model.save();
 
-        return res.status(200).json({ message: `Model aceeptance has been set` });
+        return res.status(200).json({ message: `Account status has been updated successfully` });
     } catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error })
     }
 }
 
-const setModelDecline = async (res, req) => {
-    const { body } = req;
-
-
-    res.model.isRecruited = "declined";
-
-    try {
-        await res.model.save();
-
-        return res.status(200).json({ message: `Model decline has been set` });
-    } catch (error) {
-        return res.status(error?.status || 500).json({ message: error?.message || error })
-    }
-}
-
-const deleteModelProfile = async (res, req) => {
+const deleteModelProfile = async (req, res) => {
     try {
         await Model.deleteOne({ id: res.model._id });
         return res.status(204).json({ message: "Model deleted" });
@@ -162,13 +181,13 @@ const deleteModelProfile = async (res, req) => {
 
 module.exports = {
     fetchAllModel,
+    fetchAllAvailableModel,
     fetchSpecificModel,
     fetchModelProfile,
     addModelProfile,
     updateModelProfile,
-    updateModelImages,
-    setModelInterview,
-    setModelAcceptance,
-    setModelDecline,
+    addModelImages,
+    updateAccountStatus,
+    deleteModelImage,
     deleteModelProfile
 }

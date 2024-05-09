@@ -2,8 +2,11 @@ import StatisticsCard from "../../../components/admin_c/StatisticsCard";
 import JobsTable from "../../../components/admin_c/tables/JobsTable";
 import Breadcrumb from "../../../components/general/Breadcrumb"
 import { MdWorkOutline } from "react-icons/md";
+import { useJobs } from "../../../hooks/useJobs";
 
 const JobsList = () => {
+
+    const { isLoading, jobs, refetch } = useJobs();
     return (
         <div className="mt-3">
             <Breadcrumb
@@ -16,7 +19,7 @@ const JobsList = () => {
                 <StatisticsCard
                     icon={<MdWorkOutline className="text-4xl text-gray-400" />}
                     title={"Total Jobs"}
-                    number={0}
+                    number={isLoading ? 0 :jobs?.length}
                 />
                 <StatisticsCard
                     icon={<MdWorkOutline className="text-4xl text-gray-400" />}
@@ -30,7 +33,11 @@ const JobsList = () => {
                 />
             </div>
 
-            <JobsTable />
+            <JobsTable
+                isLoading={isLoading}
+                data={jobs}
+                refetch={refetch}
+            />
         </div>
     )
 }

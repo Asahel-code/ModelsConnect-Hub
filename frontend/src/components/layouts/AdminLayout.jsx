@@ -16,10 +16,6 @@ const AdminLayout = ({ children }) => {
   };
 
   const topNavLinks = [
-    {
-      name: "profile",
-      to: "/admin/profile",
-    }
   ];
 
   const sideNavLinks = [
@@ -56,7 +52,7 @@ const AdminLayout = ({ children }) => {
       />
 
       <div className="min-h-full w-[100%]">
-        <TopNav toggleSideBar={handleToggle} links={topNavLinks} />
+        <TopNav avatar={"A"} username={"Admin"} toggleSideBar={handleToggle} links={topNavLinks} />
         {children}
       </div>
     </div>

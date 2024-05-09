@@ -3,8 +3,8 @@
 require('dotenv').config();
 
 const credentials = {
-    apiKey: process.env.API_KEY,
-    username: process.env.APP_USERNAME
+    apiKey: process.env.AT_APIKEY,
+    username: process.env.AT_USERNAME
 }
 
 const AfricasTalking = require('africastalking')(credentials);
@@ -15,7 +15,7 @@ class sendSms {
     constructor({ phoneNumber, message }) {
         if (!phoneNumber) {
             throw new Error(
-                'Missing required parameters: phonenumber'
+                'Missing required parameters: phoneNumber'
             );
         }
         else if (!message) {

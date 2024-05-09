@@ -1,8 +1,9 @@
 const ModelsBooking = require("../models/ModelsBooking");
 const Model = require("../models/Model");
-const User = require("../models/User")
+const User = require("../models/User");
+const Client = require("../models/Client");
 const { sendSms } = require('../utils/sendSms');
-const {modelBookingNotificationTemplate} = require("../utils/messages")
+const { modelBookingNotificationTemplate } = require("../utils/messages");
 
 const fetchAllModelBooking = async (req, res) => {
     try {
@@ -22,12 +23,38 @@ const fetchSpecificModelsBooking = async (req, res) => {
     }
 }
 
+const fetchCLientModelsBooking = async (req, res) => {
+    const modelsBooking = await ModelsBooking.find();
+    const client = await Client.findOne({ user: req.userId });
 
-const fetchClientModelsBooking = async (req, res) => {
+    let bookings = []
+
+    if (modelsBooking.includes(client._id)) {
+        bookings.push(modelsBooking);
+    }
+
     try {
-        const modelsBooking = await ModelsBooking.find({ client: req.userId });
+        return res.status(200).json(bookings);
+    } catch (error) {
+        return res.status(error?.status || 500).json({ message: error?.message || error });
+    }
+}
 
-        return res.status(200).json(modelsBooking);
+const fetchModelModelsBooking = async (req, res) => {
+    try {
+        const modelsBooking = await ModelsBooking.find();
+        const model = await Model.findOne({ user: req.userId });
+
+        let bookings = []
+
+        for (const modelBooking of modelsBooking) {
+            if (modelBooking.models.includes(model._id)) {
+                modelBooking.models = null;
+                bookings.push(modelBooking);
+            }
+        }
+
+        return res.status(200).json(bookings);
     } catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error });
     }
@@ -39,9 +66,10 @@ const bookModels = async (req, res) => {
     const newBooking = new ModelsBooking({
         startDate: body?.startDate,
         endDate: body?.endDate,
-        location: body?.location,
+        county: body?.location,
+        city: body?.city,
         description: body?.description,
-        client: req.userId,
+        client: body?.client,
         models: body?.models,
     });
 
@@ -57,13 +85,13 @@ const bookModels = async (req, res) => {
         }
 
         for (const mod of body?.models) {
-            const model = await Model.findOne({ _id: mod?.model });
+            const model = await Model.findOne({ _id: mod });
 
             model.isBooked = true;
 
             await model.save();
 
-            const user = await User.findOne({_id: model.user});
+            const user = await User.findOne({ _id: model.user });
 
             const phoneNumber = user.phoneNumber;
             const message = modelBookingNotificationTemplate(dates);
@@ -92,7 +120,8 @@ const deleteModelsBooking = async (req, res) => {
 module.exports = {
     fetchAllModelBooking,
     fetchSpecificModelsBooking,
-    fetchClientModelsBooking,
+    fetchCLientModelsBooking,
+    fetchModelModelsBooking,
     bookModels,
     deleteModelsBooking
 }

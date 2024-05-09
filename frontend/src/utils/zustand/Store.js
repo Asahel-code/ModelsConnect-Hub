@@ -8,36 +8,33 @@ const useUserStore = create(
         user: {
           token: null,
           isAdmin: false,
-          isLandLord: false,
-          username: null
+          isModel: false,
+          isClient: false,
+          isVerified: false
         },
         setToken: (response) =>
-          set((state) => ({ user: { ...state.user, token: response?.accessToken, isAdmin: response?.isAdmin, isLandLord: response.isLandLord, isVerified: response.isVerified, username: response?.username } })),
+          set((state) => ({ user: { ...state.user, token: response?.accessToken, isAdmin: response?.isAdmin, isModel: response.isModel, isClient: response.isClient, isVerified: response.isVerified } })),
         removeToken: () =>
-          set((state) => ({ user: { ...state.user, token: null, isAdmin: false, isLandLord: false, isVerified: false, username: null } })),
+          set((state) => ({ user: { ...state.user, token: null, isAdmin: false, isModel: false, isClient: false, isVerified: false, } })),
       }),
       { name: "models_connect_hub" }
     )
   )
 );
 
-export const useHouseStore = create(
+export const useSignUpFlowStore = create(
   devtools(
     persist(
       (set) => ({
-        house: {
-          hostel: null,
-          landlord: null,
-          name: null,
-          slug: null,
-          termsAndCondition: null,
+        persona: {
+         role: null
         },
-        setHouse: (response) =>
-          set((state) => ({ house: { ...state.house, hostel: response?.house?._id, landlord: response?.house.landlord, name: response?.house?.name, slug: response?.house?.slug, termsAndCondition: response?.landLord?.termsAndCondition } })),
-        removeHouse: () =>
-          set((state) => ({ house: { ...state.house, hostel: null, landlord: null, name: null, slug: null, termsAndCondition: null, } })),
+        setPersona: (response) =>
+          set((state) => ({ persona: { ...state.persona, role: response } })),
+        removePersona: () =>
+          set((state) => ({ persona: { ...state.persona, role: null } })),
       }),
-      { name: "pata_hostel_house" }
+      { name: "user_signup_flow" }
     )
   )
 );

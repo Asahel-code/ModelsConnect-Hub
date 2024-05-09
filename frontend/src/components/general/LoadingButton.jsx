@@ -5,12 +5,11 @@ const LoadingButton = ({ ...rest }) => {
         <Box className='flex justify-end'>
             <Button
                 isLoading
-                loadingText="Loading"
-                borderColor={"#05A3FF"}
-                textColor={"#05A3FF"}
+                borderColor={"#E59C36"}
+                textColor={"#E59C36"}
                 variant={"outline"}
                 spinnerPlacement="end"
-                width={"full"}
+                width={"fit"}
                 {...rest}
             >
                 loading

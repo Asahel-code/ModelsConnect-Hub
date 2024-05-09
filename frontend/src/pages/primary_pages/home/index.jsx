@@ -1,10 +1,15 @@
-
+import { useNavigate } from "react-router-dom";
 import img1 from "../../../assets/images/main_img1.png";
 import img2 from "../../../assets/images/main_img2.png";
 import img3 from "../../../assets/images/main_img3.png";
 import CustomButton from "../../../components/general/CustomButton";
+import { useSignUpFlowStore } from "../../../utils/zustand/Store";
 
 const Home = () => {
+
+  const setPersona = useSignUpFlowStore((state) => state.setPersona);
+  const navigate = useNavigate();
+
   return (
     <div>
       <div className="relative">
@@ -19,7 +24,14 @@ const Home = () => {
           Model Agency
         </h4>
         <div className="absolute top-[16.0rem] sm:top-1/2 inset-[40%]">
-          <CustomButton variant={"solid"} width={"200px"}>
+          <CustomButton
+            variant={"solid"}
+            width={"200px"}
+            onClick={() => {
+              setPersona("client");
+              navigate('/signup');
+            }}
+          >
             <span className="uppercase font-light">Book a model</span>
           </CustomButton>
         </div>
@@ -40,7 +52,14 @@ const Home = () => {
             <p>Do you want to work with us?</p>
           </div>
           <div className="flex justify-center">
-            <CustomButton variant={"solid"} width={"120px"}>
+            <CustomButton
+              variant={"solid"}
+              width={"120px"}
+              onClick={() => {
+                setPersona("model");
+                navigate('/signup');
+              }}
+            >
               <span className="uppercase font-light">Join now</span>
             </CustomButton>
           </div>

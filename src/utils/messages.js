@@ -9,15 +9,6 @@ const verifyAccountTemplate = (otp) => {
     `;
 };
 
-const staffPasswordTemplate = (credentials) => {
-    return `
-    Login Credential
-    Your login phone number: ${credentials.phoneNumber}
-    Your password is: ${credentials.password}
-    Ensure you change your login credentails immediately when you login
-    `;
-};
-
 const fogortPasswordTemplate = (otp) => {
     return `
     Your reset password is: ${otp}
@@ -37,7 +28,6 @@ const modelBookingNotificationTemplate = (dates) => {
 
 module.exports = {
     verifyAccountTemplate,
-    staffPasswordTemplate,
     fogortPasswordTemplate,
     modelBookingNotificationTemplate
 }

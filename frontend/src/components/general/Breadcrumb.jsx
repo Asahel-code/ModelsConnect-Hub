@@ -14,9 +14,9 @@ const Breadcrumb = ({ title, icon, subtitle }) => {
                     {title}
                 </p>
                 &nbsp;
-                <div className='text-sm'>
+                {subtitle && (<div className='text-sm'>
                     {"/"}
-                </div>
+                </div>)}
                 &nbsp;
                 {subtitle && (
                     <p className="text-sm">

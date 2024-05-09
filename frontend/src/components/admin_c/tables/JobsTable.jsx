@@ -1,24 +1,25 @@
+import PropTypes from "prop-types"
 import { GoSearch } from "react-icons/go"
-import StatusTag from "../../general/StatusTag"
+// import StatusTag from "../../general/StatusTag"
 import CustomInput from "../../general/CustomInput"
 import { Table } from "antd"
-import { useState } from "react"
-import ConfirmDeleteModal from "../../general/ConfirmDeleteModal"
-import CustomButton from "../../general/CustomButton"
-import { FiEdit } from "react-icons/fi"
+// import { useState } from "react"
+// import ConfirmDeleteModal from "../../general/ConfirmDeleteModal"
+// import CustomButton from "../../general/CustomButton"
+// import { FiEdit } from "react-icons/fi"
 
 
-const JobsTable = () => {
+const JobsTable = ({ isLoading, data, refetch }) => {
 
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    // const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const columns = [
         {
             title: "Job title",
-            dataIndex: "name",
-            key: "name",
+            dataIndex: "jobTitle",
+            key: "jobTitle",
             render: (_, item) => {
-                return <span className="font-bold">{item.name}</span>
+                return <span className="font-bold">{item.jobTitle}</span>
             }
         },
         {
@@ -27,59 +28,17 @@ const JobsTable = () => {
             key: "location",
         },
         {
-            title: "Status",
-            dataIndex: "status",
-            key: "status",
+            title: "Start date",
+            dataIndex: "startDate",
+            key: "startDate",
             // eslint-disable-next-line no-unused-vars
-            render: (_, record) => (
-                <div className={"flex gap-x-3"}>
-                    {record?.status === "active" ? (
-                        <StatusTag
-                            text={"Active"}
-                            className={"text-primary_green bg-primary_green_light w-20"}
-                        />
-                    ) : record?.status === "pending" ? (
-                        <StatusTag
-                            text={"Pending"}
-                            className={"text-zinc-600 bg-gray-200 w-20"}
-                        />
-                    ) : record?.status === "inactive" && (
-                        <StatusTag
-                            text={"Inactive"}
-                            className={"text-primary_red bg-primary_red_light w-20"}
-                        />
-                    )}
-                </div>
-            ),
+
         },
         {
-            title: "   ",
-            key: "action",
-            width: 100,
+            title: "End date",
+            dataIndex: "endDate",
+            key: "endDate",
             // eslint-disable-next-line no-unused-vars
-            render: (_, record) => (
-                <div className="flex items-center gap-4">
-                    <ConfirmDeleteModal
-                        record={record}
-                        // setRecord={setEditState}
-                        // handleDelete={handleDelete}
-                        title={record?.status === "active" ? "Deactivate this account" : "Activate this account"}
-                        isModalOpen={isDeleteModalOpen}
-                        setIsDeleteModalOpen={setIsDeleteModalOpen}
-                        btnClassName={"p-3"}
-                        btnTxt={
-                            <CustomButton
-                                width={"40px"}
-                                variant={"outline"}
-                            >
-                                <FiEdit className="text-xl" />
-                            </CustomButton>
-                        }
-                        confirmTxt={record?.status === "active" ? "Deactivate" : "Activate"}
-                    />
-
-                </div>
-            ),
 
         },
     ]
@@ -93,34 +52,26 @@ const JobsTable = () => {
                 />
             </div>
             <Table
+                oading={isLoading}
                 className={"shadow"}
                 columns={columns}
-                dataSource={client_test}
+                dataSource={data}
                 rowClassName={"hover:cursor-pointer"}
-            // pagination={{
-            //   current: data?.page + 1,
-            //   total: data?.totalElements,
-            //   pageSize: data?.size,
-            //   onChange: (page) => handlePageChange(page),
-            // }}
+                pagination={{
+                    defaultPageSize: 15,
+                    showSizeChanger: true,
+                    pageSizeOptions: ["10", "15", "20", "30"],
+                }}
             />
         </div>
     )
 }
 
-const client_test = [
-    {
-        name: "Paul Mayio",
-        status: "pending"
-    },
-    {
-        name: "Sarah Muli",
-        status: "active"
-    },
-    {
-        name: "Sarah Muli",
-        status: "inactive"
-    },
-]
+JobsTable.propTypes = {
+    isLoading: PropTypes.bool,
+    data: PropTypes.array,
+    refetch: PropTypes.func
+}
+
 
 export default JobsTable

@@ -10,6 +10,7 @@ const {
     validateOtp,
     validatePasswordReset } = require('../utils/errorHandler');
 const { fogortPasswordTemplate, verifyAccountTemplate } = require("../utils/messages");
+const { generateOTP } = require("../utils/helper");
 
 const handleLogin = async (req, res) => {
     const { body } = req;
@@ -18,15 +19,13 @@ const handleLogin = async (req, res) => {
     if (error) return res.status(400).json({ message: error.details[0].message });
 
     const foundUser = await User.findOne({ phoneNumber: body?.phoneNumber }).exec();
-    if (!foundUser) return res.status(401).json({ message: "Please confirm your email!" }); //Unauthorized 
+    if (!foundUser) return res.status(401).json({ message: "Please confirm your phone number!" }); //Unauthorized 
     // evaluate password 
     const match = await bcrypt.compare(body.password, foundUser.password);
     if (match) {
         // create JWTs
         const isVerified = foundUser.isVerified;
-        const username = foundUser.username;
         const isAdmin = foundUser.isAdmin;
-        const isStaff = foundUser.isStaff;
         const isModel = foundUser.isModel;
         const isClient = foundUser.isClient;
 
@@ -34,10 +33,8 @@ const handleLogin = async (req, res) => {
             {
                 "UserInfo": {
                     "userId": foundUser._id,
-                    "username": foundUser.username,
                     "isVerified": foundUser.isVerified,
                     "isAdmin": foundUser.isAdmin,
-                    "isStaff": foundUser.isStaff,
                     "isModel": foundUser.isModel,
                     "isClient": foundUser.isClient,
                 }
@@ -48,7 +45,7 @@ const handleLogin = async (req, res) => {
         await foundUser.save();
 
         // Send userId username and access token to user
-        return res.status(200).json({ username, isAdmin, isStaff, isModel, isClient, accessToken, isVerified });
+        return res.status(200).json({ isAdmin, isModel, isClient, accessToken, isVerified });
 
     } else {
         return res.status(401).json({ message: "Please confirm your password" });
@@ -62,7 +59,7 @@ const handlePasswordResetRequest = async (req, res) => {
     if (error) return res.status(400).json({ message: error.details[0].message });
 
     const foundUser = await User.findOne({ phoneNumber: body?.phoneNumber }).exec();
-    if (!foundUser) return res.status(401).json({ message: "Please confirm your email!" }); //Unauthorized 
+    if (!foundUser) return res.status(401).json({ message: "Please confirm your phone number!" }); //Unauthorized 
 
     OTP = generateOTP();
 
@@ -88,7 +85,7 @@ const handlePasswordResetRequest = async (req, res) => {
 
         await sms.sendMessage();
 
-        return res.status(200).json({ message: "check your phone messages a password reset token has been sent" });
+        return res.status(200).json({ message: "Check your phone messages a password reset token has been sent" });
     }
     catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error });
@@ -112,7 +109,7 @@ const resetPassword = async (req, res) => {
         process.env.PASSWORD_RESET_SECRET,
         async (error, decoded) => {
             if (error || foundUser.phoneNumber !== decoded.phoneNumber) return res.status(403).json(({ message: "You haven't initiated a password reset your or your token has expired!! Please resend your phone number" }));
-            if (error || body.currentPassword !== decoded.token) return res.status(403).json(({ message: "Your password token has expired!! Please resend your email" }));
+            if (error || body.currentPassword !== decoded.token) return res.status(403).json(({ message: "Your password token has expired!! Please resend your phone number" }));
             else {
                 try {
                     await VerificationToken.findByIdAndDelete(token._id);
@@ -151,7 +148,7 @@ const verifyAccount = async (req, res) => {
     if (!token) return res.status(404).json({ message: 'Otp does not exist!' });;
 
     //Comparing the token delivered with one in the database
-    const isMatched = await token.compareToken(body.otp);
+    const isMatched = await token.compareToken(token, body.otp);
     if (!isMatched) return res.status(400).json({ message: "Please provide a valid token" });
 
     /*
@@ -166,9 +163,7 @@ const verifyAccount = async (req, res) => {
         await foundUser.save();
 
         const isVerified = foundUser.isVerified;
-        const username = foundUser.username;
         const isAdmin = foundUser.isAdmin;
-        const isStaff = foundUser.isStaff;
         const isModel = foundUser.isModel;
         const isClient = foundUser.isClient;
 
@@ -176,10 +171,8 @@ const verifyAccount = async (req, res) => {
             {
                 "UserInfo": {
                     "userId": foundUser._id,
-                    "username": foundUser.username,
                     "isVerified": foundUser.isVerified,
                     "isAdmin": foundUser.isAdmin,
-                    "isStaff": foundUser.isStaff,
                     "isModel": foundUser.isModel,
                     "isClient": foundUser.isClient,
                 }
@@ -188,12 +181,12 @@ const verifyAccount = async (req, res) => {
         );
 
         const phoneNumber = foundUser.phoneNumber;
-        const message = `${foundUser.username}, your account has been verified successfully`
+        const message = `Your account has been verified successfully`
         const sms = new sendSms({ phoneNumber, message });
 
         await sms.sendMessage();
 
-        return res.status(200).json({ message: 'Your account has been verified', username, isAdmin, isStaff, isModel, isClient, accessToken, isVerified });
+        return res.status(200).json({ message: 'Your account has been verified', isAdmin, isModel, isClient, accessToken, isVerified });
     }
     catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error });
@@ -229,7 +222,7 @@ const resendVerificationToken = async (req, res) => {
 
             await sms.sendMessage();
 
-            return res.status(200).json({ message: 'Your OTP has been reset successfully please check your email' });
+            return res.status(200).json({ message: 'Your OTP has been reset successfully please check your phone messages' });
         }
         catch (error) {
             return res.status(500).json({ message: error.message });
@@ -252,7 +245,7 @@ const resendVerificationToken = async (req, res) => {
 
             await sms.sendMessage();
 
-            return res.status(200).json({ message: 'Your OTP has been reset successfully please check your email' });
+            return res.status(200).json({ message: 'Your OTP has been reset successfully please check your phone messages' });
         }
         catch (error) {
             return res.status(error?.status || 500).json({ message: error?.message || error });

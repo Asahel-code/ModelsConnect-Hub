@@ -12,7 +12,7 @@ const AxiosUtility = axios.create({
 });
 
 export const setAuthToken = (instance) => {
-  const { state } = JSON.parse(localStorage?.getItem("modelling_agency"));
+  const { state } = JSON.parse(localStorage?.getItem("models_connect_hub"));
   const token = state?.user?.token;
 
   if (token) {

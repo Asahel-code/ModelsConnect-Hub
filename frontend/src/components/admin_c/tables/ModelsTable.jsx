@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import { GoSearch } from "react-icons/go"
 import StatusTag from "../../general/StatusTag"
 import CustomInput from "../../general/CustomInput"
@@ -6,10 +7,13 @@ import { useState } from "react"
 import ConfirmDeleteModal from "../../general/ConfirmDeleteModal"
 import CustomButton from "../../general/CustomButton"
 import { FiEdit } from "react-icons/fi"
+import { useChangeAccountState } from "../../../hooks/useModel"
 
-const ModelsTable = () => {
+const ModelsTable = ({ isLoading, data, refetch }) => {
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const { handleUpdate } = useChangeAccountState(refetch, setIsDeleteModalOpen);
 
     const columns = [
         {
@@ -17,13 +21,16 @@ const ModelsTable = () => {
             dataIndex: "name",
             key: "name",
             render: (_, item) => {
-                return <span className="font-bold">{item.name}</span>
+                return <span className="font-bold">{item?.name}</span>
             }
         },
         {
             title: "Model location",
             dataIndex: "location",
             key: "location",
+            render: (_, item) => {
+                return <span className="capitalize">{`${item?.county}, ${item?.city}`}</span>
+            }
         },
         {
             title: "Status",
@@ -61,7 +68,7 @@ const ModelsTable = () => {
                     <ConfirmDeleteModal
                         record={record}
                         // setRecord={setEditState}
-                        // handleDelete={handleDelete}
+                        handleDelete={() => handleUpdate((record?.status === "pending" || record?.status === "inactive") ? { id: record?._id, data: { status: "active" } } : { id: record?._id, data: { status: "inactive" } })}
                         title={record?.status === "active" ? "Deactivate this account" : "Activate this account"}
                         isModalOpen={isDeleteModalOpen}
                         setIsDeleteModalOpen={setIsDeleteModalOpen}
@@ -92,34 +99,25 @@ const ModelsTable = () => {
                 />
             </div>
             <Table
+                loading={isLoading}
                 className={"shadow"}
                 columns={columns}
-                dataSource={client_test}
+                dataSource={data}
                 rowClassName={"hover:cursor-pointer"}
-            // pagination={{
-            //   current: data?.page + 1,
-            //   total: data?.totalElements,
-            //   pageSize: data?.size,
-            //   onChange: (page) => handlePageChange(page),
-            // }}
+                pagination={{
+                    defaultPageSize: 15,
+                    showSizeChanger: true,
+                    pageSizeOptions: ["10", "15", "20", "30"],
+                }}
             />
         </div>
     )
 }
 
-const client_test = [
-    {
-        name: "Paul Mayio",
-        status: "pending"
-    },
-    {
-        name: "Sarah Muli",
-        status: "active"
-    },
-    {
-        name: "Sarah Muli",
-        status: "inactive"
-    },
-]
+ModelsTable.propTypes = {
+    isLoading: PropTypes.bool,
+    data: PropTypes.array,
+    refetch: PropTypes.func
+}
 
 export default ModelsTable

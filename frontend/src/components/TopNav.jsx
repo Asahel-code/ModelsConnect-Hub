@@ -7,14 +7,13 @@ import useUserStore from "../utils/zustand/Store";
 import { Link, useNavigate } from "react-router-dom";
 import { toastProps } from '../utils/toastProps';
 
-const TopNav = ({ toggleSideBar, links }) => {
+const TopNav = ({ username, avatar, toggleSideBar, links }) => {
 
     const toast = useToast();
     const navigate = useNavigate();
 
     const [showDropDown, setShowDropDown] = useState(false);
-    const removeToken = useUserStore((state) => state.removeToken);
-    const user = useUserStore((state) => state.user);
+    const removeToken = useUserStore((state) => state.removeToken)
 
     const logout = () => {
         removeToken();
@@ -46,10 +45,10 @@ const TopNav = ({ toggleSideBar, links }) => {
                 <Box className="relative">
                     <Box display={"flex"} gap={4} alignItems={"center"}>
                         <div className="flex items-center gap-4">
-                            <div className="h-9 w-9 bg-secondary_color rounded-full flex justify-center items-center">
-                                <span className="uppercase text-md  font-[1000] text-faded_yellow">PL</span>
+                            <div className="h-10 w-10 bg-secondary_color rounded-full flex justify-center items-center">
+                                <span className="uppercase text-md  font-[1000] text-faded_yellow">{avatar}</span>
                             </div>
-                            <Text className="text-md">Hi, <span className="text-primary_color font-semibold text-lg">{user?.username}</span></Text>
+                            <Text className="text-md">Hi, <span className="text-primary_color font-semibold text-sm">{username}</span></Text>
                         </div>
                         <button onClick={() => (setShowDropDown((prev) => (!prev)))}>
                         <FaCaretDown className="text-xl" />
@@ -84,7 +83,9 @@ const TopNav = ({ toggleSideBar, links }) => {
 
 TopNav.propTypes = {
     toggleSideBar: PropTypes.func.isRequired,
-    links: PropTypes.array.isRequired
+    links: PropTypes.array.isRequired,
+    username: PropTypes.string,
+    avatar: PropTypes.string
 }
 
 export default TopNav;

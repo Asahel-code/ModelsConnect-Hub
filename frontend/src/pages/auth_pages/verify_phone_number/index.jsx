@@ -1,10 +1,12 @@
 import AuthLayout from "../../../components/layouts/AuthLayout"
-import { useResendVerificationTokenRequest } from "../../../hooks/useResendVerificationTokenRequest"
 import { FormControl, FormLabel } from "@chakra-ui/react"
 import CustomInput from "../../../components/general/CustomInput"
 import CustomButton from "../../../components/general/CustomButton";
+import { useResendVerificationTokenRequest, useVerifyAccount } from "../../../hooks/useAuth";
+import LoadingButton from "../../../components/general/LoadingButton";
 
 const VerifyPhoneNumber = () => {
+    const { verifyAccountMutation, handleSubmit } = useVerifyAccount();
     return (
         <AuthLayout>
             <div className="pt-24 pb-20 md:px-20 px-10 min-h-full">
@@ -13,7 +15,7 @@ const VerifyPhoneNumber = () => {
                         <div className="text-center py-4 border-b">
                             <h3 className="text-2xl font-bold">Verify your Account</h3>
                         </div>
-                        <form className="my-3 p-5">
+                        <form className="my-3 p-5" onSubmit={handleSubmit}>
                             <div className="mb-2">
                                 <p className="text-sm">Check your phone message, a verification code has been sent to you</p>
                             </div>
@@ -27,7 +29,16 @@ const VerifyPhoneNumber = () => {
                                     />
                                 </FormControl>
                                 <ResendVerificationToken />
-                                <CustomButton variant={"solid"} text={"Submit"} />
+                                {verifyAccountMutation.isLoading ? (
+                                    <LoadingButton
+                                        loadingText={"Login..."} u
+                                    />
+                                ) : (
+                                    <CustomButton
+                                        type={"submit"}
+                                        variant={"solid"}
+                                        text={"Submit"} />
+                                )}
                             </div>
                         </form>
                     </div>

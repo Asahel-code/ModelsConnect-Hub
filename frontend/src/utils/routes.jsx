@@ -22,10 +22,12 @@ import ClientContract from "../pages/client_pages/client_contract";
 import ViewAssignedModels from "../pages/client_pages/client_contract/view/ViewAssignedModels";
 
 import Dashboard from "../pages/admin_pages/dashboard_page";
-import AdminProfile from "../pages/admin_pages/admin_profile";
 import ModelsList from "../pages/admin_pages/admin_models_list";
 import ClientsList from "../pages/admin_pages/admin_clients_list";
 import JobsList from "../pages/admin_pages/admin_jobs_list";
+import ClientMiddleware from "./middleware/ClientMiddleware";
+import ModelMiddleware from "./middleware/ModelMiddleware";
+import AuthMiddleware from "./middleware/AuthMiddleware";
 
 
 export const PrimaryRoutes = [
@@ -50,7 +52,7 @@ export const AuthRoutes = [
     },
     {
         path: "/verify_phone_number",
-        element: <VerifyPhoneNumber />
+        element: <AuthMiddleware><VerifyPhoneNumber /></AuthMiddleware>
     },
     {
         path: "/forgot_password",
@@ -65,11 +67,11 @@ export const AuthRoutes = [
 export const OnboardingRoutes = [
     {
         path: "client",
-        element: <OnboardClient />
+        element: <ClientMiddleware><OnboardClient /></ClientMiddleware>
     },
     {
         path: "model",
-        element: <OnboardModel />
+        element: <ModelMiddleware><OnboardModel /></ModelMiddleware>
     },
 ];
 
@@ -128,9 +130,5 @@ export const AdminRoutes = [
     {
         path: "jobs",
         element: <JobsList />
-    },
-    {
-        path: "profile",
-        element: <AdminProfile />
-    },
+    }
 ]
