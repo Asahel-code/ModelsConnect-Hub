@@ -1,17 +1,13 @@
 import PropTypes from "prop-types"
 import { GoSearch } from "react-icons/go"
-// import StatusTag from "../../general/StatusTag"
 import CustomInput from "../../general/CustomInput"
 import { Table } from "antd"
-// import { useState } from "react"
-// import ConfirmDeleteModal from "../../general/ConfirmDeleteModal"
-// import CustomButton from "../../general/CustomButton"
-// import { FiEdit } from "react-icons/fi"
+import StatusTag from "../../general/StatusTag"
+import moment from "moment"
 
 
-const JobsTable = ({ isLoading, data, refetch }) => {
+const JobsTable = ({ isLoading, data }) => {
 
-    // const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const columns = [
         {
@@ -28,18 +24,41 @@ const JobsTable = ({ isLoading, data, refetch }) => {
             key: "location",
         },
         {
-            title: "Start date",
+            title: "Start Date",
             dataIndex: "startDate",
             key: "startDate",
-            // eslint-disable-next-line no-unused-vars
-
+            render: (_, item) => {
+                return <span>{moment(item?.startDate).format("Do MMMM, YYYY")}</span>
+            }
         },
         {
-            title: "End date",
+            title: "End Date",
             dataIndex: "endDate",
             key: "endDate",
+            render: (_, item) => {
+                return <span>{moment(item?.endDate).format("Do MMMM, YYYY")}</span>
+            }
+        },
+        {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
             // eslint-disable-next-line no-unused-vars
-
+            render: (_, record) => (
+                <div className={"flex gap-x-3"}>
+                    {record?.endDate > new Date().toISOString() ? (
+                        <StatusTag
+                            text={"Open"}
+                            className={"text-primary_green bg-primary_green_light w-20"}
+                        />
+                    ) : (
+                        <StatusTag
+                            text={"Closed"}
+                            className={"text-zinc-600 bg-gray-200 w-20"}
+                        />
+                    )}
+                </div>
+            ),
         },
     ]
 
@@ -52,7 +71,7 @@ const JobsTable = ({ isLoading, data, refetch }) => {
                 />
             </div>
             <Table
-                oading={isLoading}
+                loading={isLoading}
                 className={"shadow"}
                 columns={columns}
                 dataSource={data}

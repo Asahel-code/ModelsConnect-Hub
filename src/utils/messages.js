@@ -16,10 +16,11 @@ const fogortPasswordTemplate = (otp) => {
     `;
 };
 
-const modelBookingNotificationTemplate = (dates) => {
+const modelBookingNotificationTemplate = (dates, description) => {
     return `
     Congrat, you got a gig,
     From: ${convertDateTimeFormart(dates.startDate)} to: ${convertDateTimeFormart(dates.endDate)}.
+    Here a description of it: ${description}
     Login to check the requirement and location 
     `;
 }

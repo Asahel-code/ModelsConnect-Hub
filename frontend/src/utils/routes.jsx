@@ -19,7 +19,7 @@ import ClientHome from "../pages/client_pages/client_home";
 import ClientProfile from "../pages/client_pages/client_profile";
 import ViewModel from "../pages/client_pages/client_home/view/ViewModel";
 import ClientContract from "../pages/client_pages/client_contract";
-import ViewAssignedModels from "../pages/client_pages/client_contract/view/ViewAssignedModels";
+// import ViewAssignedModels from "../pages/client_pages/client_contract/view/ViewAssignedModels";
 
 import Dashboard from "../pages/admin_pages/dashboard_page";
 import ModelsList from "../pages/admin_pages/admin_models_list";
@@ -104,10 +104,10 @@ export const ClientRoutes = [
         path: "contracts",
         element: <ClientContract />
     },
-    {
-        path: "contracts/:id",
-        element: <ViewAssignedModels />
-    },
+    // {
+    //     path: "contracts/:id",
+    //     element: <ViewAssignedModels />
+    // },
     {
         path: "profile",
         element: <ClientProfile />

@@ -7,6 +7,7 @@ import { useJobs } from "../../../hooks/useJobs";
 const JobsList = () => {
 
     const { isLoading, jobs, refetch } = useJobs();
+    
     return (
         <div className="mt-3">
             <Breadcrumb
@@ -19,17 +20,17 @@ const JobsList = () => {
                 <StatisticsCard
                     icon={<MdWorkOutline className="text-4xl text-gray-400" />}
                     title={"Total Jobs"}
-                    number={isLoading ? 0 :jobs?.length}
+                    number={jobs?.length ?? 0}
                 />
                 <StatisticsCard
                     icon={<MdWorkOutline className="text-4xl text-gray-400" />}
                     title={"Done Jobs"}
-                    number={0}
+                    number={jobs?.reduce((acc, obj) => obj?.endDate < new Date().toISOString() ? acc += 1 : acc, 0) ?? 0}
                 />
                 <StatisticsCard
                     icon={<MdWorkOutline className="text-4xl text-gray-400" />}
                     title={"Open Jobs"}
-                    number={0}
+                    number={jobs?.reduce((acc, obj) => obj?.endDate > new Date().toISOString() ? acc += 1 : acc, 0) ?? 0}
                 />
             </div>
 

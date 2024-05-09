@@ -44,7 +44,7 @@ const getAllAvailableModels = async () => {
 
 const getSpecificModel = async (id) => {
     setAuthToken(AxiosUtility);
-    const { data: res } = await AxiosUtility.patch(`/models/${id}`);
+    const { data: res } = await AxiosUtility.get(`/models/${id}`);
 
     return res;
 }

@@ -8,12 +8,14 @@ import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import moment from "moment";
 import StatusTag from "../general/StatusTag";
-import { Link } from "react-router-dom";
 import ConfirmDeleteModal from "../general/ConfirmDeleteModal";
+import { useDeleteContract } from "../../hooks/useJobs";
 
-const ContractTable = ({ handleEdit }) => {
+const ContractTable = ({ handleEdit, isLoading, data, refetch }) => {
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const { handleDelete } = useDeleteContract(refetch, setIsDeleteModalOpen);
 
     const columns = [
         {
@@ -21,23 +23,32 @@ const ContractTable = ({ handleEdit }) => {
             dataIndex: "jobTitle",
             key: "jobTitle",
             render: (_, item) => {
-                return <Link to="/client/contracts/578959hvr89tu"><span className="font-bold">{item.jobTitle}</span></Link>
+                return <span className="font-bold">{item.jobTitle}</span>
             }
         },
         {
             title: "No. of Models",
             dataIndex: "models",
             key: "models",
+            render: (_, item) => {
+                return <span>{item?.models?.length}</span>
+            }
         },
         {
             title: "Start Date",
-            dataIndex: "start",
-            key: "start",
+            dataIndex: "startDate",
+            key: "startDate",
+            render: (_, item) => {
+                return <span>{moment(item?.startDate).format("Do MMMM, YYYY")}</span>
+            }
         },
         {
             title: "End Date",
-            dataIndex: "end",
-            key: "end",
+            dataIndex: "endDate",
+            key: "endDate",
+            render: (_, item) => {
+                return <span>{moment(item?.endDate).format("Do MMMM, YYYY")}</span>
+            }
         },
         {
             title: "Status",
@@ -46,7 +57,7 @@ const ContractTable = ({ handleEdit }) => {
             // eslint-disable-next-line no-unused-vars
             render: (_, record) => (
                 <div className={"flex gap-x-3"}>
-                    {record?.status ? (
+                    {record?.endDate > new Date().toISOString() ? (
                         <StatusTag
                             text={"Open"}
                             className={"text-primary_green bg-primary_green_light w-20"}
@@ -75,9 +86,8 @@ const ContractTable = ({ handleEdit }) => {
                         <FiEdit className="text-xl" />
                     </CustomButton>
                     <ConfirmDeleteModal
-                        // record={record}
-                        // setRecord={setEditState}
-                        // handleDelete={handleDelete}
+                        record={record}
+                        handleDelete={() => handleDelete(record?._id)}
                         isModalOpen={isDeleteModalOpen}
                         setIsDeleteModalOpen={setIsDeleteModalOpen}
                         btnClassName={"p-3"}
@@ -114,33 +124,26 @@ const ContractTable = ({ handleEdit }) => {
                 />
             </div>
             <Table
+                loading={isLoading}
                 className={"shadow"}
                 columns={columns}
-                dataSource={testdata}
+                dataSource={data}
                 rowClassName={"hover:cursor-pointer"}
-            // pagination={{
-            //   current: data?.page + 1,
-            //   total: data?.totalElements,
-            //   pageSize: data?.size,
-            //   onChange: (page) => handlePageChange(page),
-            // }}
+                pagination={{
+                    defaultPageSize: 15,
+                    showSizeChanger: true,
+                    pageSizeOptions: ["10", "15", "20", "30"],
+                }}
             />
         </div>
     )
 }
 
 ContractTable.propTypes = {
-    handleEdit: PropTypes.func
+    handleEdit: PropTypes.func,
+    isLoading: PropTypes.bool,
+    data: PropTypes.array,
+    refetch: PropTypes.func,
 }
-
-const testdata = [
-    {
-        jobTitle: "HETET",
-        models: 20,
-        startDate: moment().format("Do MMMM, YYYY"),
-        endDate: moment().format("Do MMMM, YYYY"),
-        status: true,
-    }
-]
 
 export default ContractTable

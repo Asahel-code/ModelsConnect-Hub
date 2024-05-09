@@ -8,7 +8,7 @@ const ClientHome = () => {
     const { isLoading, data } = useAvailableModel();
     return (
         <div className="mt-3">
-            <h3 className="text-xl font-bold">Welcome,</h3>
+            <h3 className="text-3xl font-bold">Welcome</h3>
             <div className="flex justify-center mt-5">
                 <h3 className="text-xl font-semibold">Available Models</h3>
             </div>

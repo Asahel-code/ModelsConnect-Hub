@@ -3,10 +3,14 @@ import ModelServices from '../services/ModelServices';
 import { useErrorToast } from './useErrorToast';
 import { useSuccessToast } from './useSuccessToast';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { MONTHS } from '../utils/timeFormat';
 
 export const useModel = () => {
     const handleError = useErrorToast();
+
+    const [modelCountPerMonth, setModelCountPerMonth] = useState([]);
+    const [barChartMonths, setBarChartMonths] = useState([]);
 
     const { isLoading, data, refetch } = useQuery({
         queryKey: ["models"],
@@ -16,7 +20,69 @@ export const useModel = () => {
         },
     });
 
-    return { isLoading, models: data, refetch };
+    useEffect(() => {
+        const totalModels = Object.entries(
+            !isLoading && data?.reduce((b, a) => {
+                let month = a?.createdAt.split("T")[0].substr(0, 7);
+                if (Object.prototype.hasOwnProperty.call(b, month))
+                    b[month]?.push(a);
+                else
+                    b[month] = [a];
+                return b;
+            }, Object.create(null))
+        )
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map((e) => ({ [e[0]]: e[1] }));
+    
+        let monthsArray = []
+        let onboardedModelsPerMonth = []
+    
+    
+        totalModels.forEach((item) => {
+            const key = Object.keys(item)[0];
+            const monthOfDate = MONTHS[new Date(key).getMonth()];
+            monthsArray.push(monthOfDate);
+    
+            const arrayOfModels = Object.values(item)[0];
+    
+            const totalMonthlyOnboardedModels = arrayOfModels?.reduce((acc, obj) => obj ? acc += 1 : acc, 0);
+            onboardedModelsPerMonth.push(totalMonthlyOnboardedModels)
+        });
+    
+        setBarChartMonths(monthsArray);
+        setModelCountPerMonth(onboardedModelsPerMonth);
+    },[data, isLoading]);
+
+
+    const modelOnboardedSummary = useMemo(
+        () => ({
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                },
+            },
+
+            data: {
+                labels: barChartMonths,
+                datasets: [
+                    {
+                        label: "Models",
+                        data: modelCountPerMonth,
+                        borderColor: 'rgb(240, 99, 12)',
+                        backgroundColor: 'rgba(240, 99, 12, 0.5)',
+                    },
+                ],
+                text: "35",
+            },
+        }),
+        [modelCountPerMonth, barChartMonths]
+    );
+
+
+    return { isLoading, models: data, modelOnboardedSummary, refetch };
 }
 
 export const useAvailableModel = () => {
@@ -62,7 +128,7 @@ export const useModelProfile = () => {
     return { isLoading, data, refetch };
 }
 
-export const useCreateModelProfile = (refetch, isEditing, data) => {
+export const useCreateModelProfile = (refetch, isEditing, data)  => {
     const handleError = useErrorToast();
     const handleSuccess = useSuccessToast();
     const navigate = useNavigate();

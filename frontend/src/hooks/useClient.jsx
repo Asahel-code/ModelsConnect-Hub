@@ -3,10 +3,14 @@ import { useMutation, useQuery } from 'react-query';
 import ClientServices from '../services/ClientServices';
 import { useSuccessToast } from './useSuccessToast';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { MONTHS } from '../utils/timeFormat';
 
 export const useClient = () => {
     const handleError = useErrorToast();
+
+    const [clientCountPerMonth, setClientCountPerMonth] = useState([]);
+    const [barChartMonths, setBarChartMonths] = useState([]);
 
     const { isLoading, data, refetch } = useQuery({
         queryKey: ["clients"],
@@ -16,7 +20,69 @@ export const useClient = () => {
         },
     });
 
-    return { isLoading, clients: data, refetch };
+    useEffect(() => {
+        const totalClients = Object.entries(
+            !isLoading && data?.reduce((b, a) => {
+                let month = a?.createdAt.split("T")[0].substr(0, 7);
+                if (Object.prototype.hasOwnProperty.call(b, month))
+                    b[month]?.push(a);
+                else
+                    b[month] = [a];
+                return b;
+            }, Object.create(null))
+        )
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map((e) => ({ [e[0]]: e[1] }));
+    
+        let monthsArray = []
+        let onboardedClientPerMonth = []
+    
+    
+        totalClients.forEach((item) => {
+            const key = Object.keys(item)[0];
+            const monthOfDate = MONTHS[new Date(key).getMonth()];
+            monthsArray.push(monthOfDate);
+    
+            const arrayOfClients = Object.values(item)[0];
+    
+            const totalMonthlyOnboardedClient = arrayOfClients?.reduce((acc, obj) => obj ? acc += 1 : acc, 0);
+            onboardedClientPerMonth.push(totalMonthlyOnboardedClient)
+        });
+    
+        setBarChartMonths(monthsArray);
+        setClientCountPerMonth(onboardedClientPerMonth);
+    },[data, isLoading]);
+
+
+    const clientOnboardedSummary = useMemo(
+        () => ({
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                },
+            },
+
+            data: {
+                labels: barChartMonths,
+                datasets: [
+                    {
+                        label: "Clients",
+                        data: clientCountPerMonth,
+                        borderColor: 'rgb(240, 99, 12)',
+                        backgroundColor: 'rgba(240, 99, 12, 0.5)',
+                    },
+                ],
+                text: "35",
+            },
+        }),
+        [clientCountPerMonth, barChartMonths]
+    );
+
+
+    return { isLoading, clients: data, clientOnboardedSummary, refetch };
 }
 
 export const useClientProfile = () => {

@@ -13,7 +13,7 @@ const ModelProfile = () => {
 
     const isEditing = true;
 
-    const { modelState, updateModelProfileMutation, handleChange, handleSubmit } = useCreateModelProfile(refetch, data, isEditing);
+    const { modelState, updateModelProfileMutation, handleChange, handleSubmit } = useCreateModelProfile(refetch, isEditing, data);
 
     return (
         // <Profile />

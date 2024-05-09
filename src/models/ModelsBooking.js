@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const modelsBookingSchema = new Schema(
     {
+        jobTitle: { type: String, required: true },
         startDate: { type: Date, required: true },
         endDate: { type: Date, required: true },
         county: { type: String, required: true },

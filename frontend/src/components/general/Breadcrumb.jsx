@@ -31,7 +31,7 @@ const Breadcrumb = ({ title, icon, subtitle }) => {
 Breadcrumb.propTypes = {
     title: PropTypes.string.isRequired,
     icon: PropTypes.element.isRequired,
-    subtitle: PropTypes.string
+    subtitle: PropTypes.any
 }
 
 export default Breadcrumb

@@ -23,14 +23,16 @@ const fetchSpecificModelsBooking = async (req, res) => {
     }
 }
 
-const fetchCLientModelsBooking = async (req, res) => {
+const fetchClientModelsBooking = async (req, res) => {
     const modelsBooking = await ModelsBooking.find();
     const client = await Client.findOne({ user: req.userId });
 
     let bookings = []
 
-    if (modelsBooking.includes(client._id)) {
-        bookings.push(modelsBooking);
+    for(const booking of modelsBooking){
+        if(booking.client.equals(client._id)){
+            bookings.push(booking);
+        }
     }
 
     try {
@@ -64,9 +66,10 @@ const bookModels = async (req, res) => {
     const { body } = req;
 
     const newBooking = new ModelsBooking({
+        jobTitle: body?.jobTitle,
         startDate: body?.startDate,
         endDate: body?.endDate,
-        county: body?.location,
+        county: body?.county,
         city: body?.city,
         description: body?.description,
         client: body?.client,
@@ -94,14 +97,33 @@ const bookModels = async (req, res) => {
             const user = await User.findOne({ _id: model.user });
 
             const phoneNumber = user.phoneNumber;
-            const message = modelBookingNotificationTemplate(dates);
+            const message = modelBookingNotificationTemplate(dates, newBooking.description);
             const sms = new sendSms({ phoneNumber, message });
 
             await sms.sendMessage();
         }
 
 
-        return res.status(201).json({ message: `${req.user}, your booking has been set` })
+        return res.status(201).json({ message: `Your contract has been set` })
+    } catch (error) {
+        return res.status(error?.status || 500).json({ message: error?.message || error });
+    }
+}
+
+const updateBookModels = async (req, res) => {
+    const { body } = req;
+
+    res.modelsBooking.jobTitle = body?.jobTitle;
+    res.modelsBooking.startDate = body?.startDate;
+    res.modelsBooking.endDate = body?.endDate;
+    res.modelsBooking.county = body?.county;
+    res.modelsBooking.city = body?.city;
+    res.modelsBooking.description = body?.description;
+
+    try {
+        res.modelsBooking.save();
+
+        return res.status(201).json({ message: `Your contract has been updated` })
     } catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error });
     }
@@ -109,7 +131,7 @@ const bookModels = async (req, res) => {
 
 const deleteModelsBooking = async (req, res) => {
     try {
-        await newBooking.deleteOne({ id: res.modelsBooking._id });
+        await ModelsBooking.deleteOne({ id: res.modelsBooking._id });
 
         return res.status(204).json({ message: "Models booking deleted" })
     } catch (error) {
@@ -120,8 +142,9 @@ const deleteModelsBooking = async (req, res) => {
 module.exports = {
     fetchAllModelBooking,
     fetchSpecificModelsBooking,
-    fetchCLientModelsBooking,
+    fetchClientModelsBooking,
     fetchModelModelsBooking,
     bookModels,
+    updateBookModels,
     deleteModelsBooking
 }
