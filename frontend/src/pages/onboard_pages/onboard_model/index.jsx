@@ -1,13 +1,29 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Stepper from "../../../components/onboarding/stepper/Stepper";
 import CustomButton from "../../../components/general/CustomButton";
 import PersonalInfo from "./PersonalInfo";
 import UploadPhotos from "./UploadPhotos";
+import { useCreateModelProfile, useModelProfile } from "../../../hooks/useModel";
+import LoadingButton from "../../../components/general/LoadingButton";
 
 const OnboardModel = () => {
 
     const [currentStep, setCurrentStep] = useState(0);
+
+    const navigate = useNavigate();
+
+    const { isLoading, data, refetch } = useModelProfile();
+
+    const isEditing = false;
+
+    const { modelState, images, createProfileMutation, setImages, handleChange, handleSubmit } = useCreateModelProfile(refetch, isEditing, null);
+
+    useEffect(() => {
+        if (!isLoading && data) {
+            navigate('/model');
+        }
+    }, [data, isLoading, navigate]);
 
     const steps = [
         {
@@ -40,16 +56,31 @@ const OnboardModel = () => {
                         <PersonalInfo
                             currentStep={currentStep}
                             setCurrentStep={setCurrentStep}
+                            modelState={modelState}
+                            handleChange={handleChange}
                         />
                     ) : currentStep === 1 && (
                         <UploadPhotos
                             currentStep={currentStep}
                             setCurrentStep={setCurrentStep}
+                            images={images}
+                            setImages={setImages}
                         />
                     )}
                     <div className="mt-16">
                         <div className="absolute bottom-4 right-0 px-8">
-                            <CustomButton variant={"solid"} text={currentStep < (steps.length - 1) ? "Proceed" : "Complete"} onClick={() => currentStep < (steps.length - 1) && setCurrentStep((prev) => (prev + 1))} />
+                            {createProfileMutation.isLoading ? (
+                                <LoadingButton
+                                    loadingText={"Creating..."}
+                                />
+                            ) : (
+                                <CustomButton
+                                    type={"button"}
+                                    variant={"solid"}
+                                    text={currentStep < (steps.length - 1) ? "Proceed" : "Complete"}
+                                    onClick={() => currentStep < (steps.length - 1) ? setCurrentStep((prev) => (prev + 1)): handleSubmit()}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

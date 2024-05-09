@@ -3,13 +3,20 @@ import { FormControl, FormLabel } from "@chakra-ui/react"
 import CustomInput from "../../../components/general/CustomInput"
 import CustomButton from "../../../components/general/CustomButton";
 import AuthLayout from "../../../components/layouts/AuthLayout";
-import { FaRegUser } from "react-icons/fa";
 import { GoLock } from "react-icons/go";
+import { Link } from "react-router-dom";
+import { useSignUpFlowStore } from "../../../utils/zustand/Store";
+import { useRegister } from "../../../hooks/useAuth";
+import LoadingButton from "../../../components/general/LoadingButton";
 
 const Signup = () => {
 
   const [passwordType, setPasswordType] = useState("password");
   const [passwordConfirmationType, setPasswordConfimationType] = useState("password");
+
+  const removePersona = useSignUpFlowStore((state) => state.removePersona);
+
+  const { modelRegistrationMutation, clientRegistrationMutation, handleSubmit } = useRegister();
 
   return (
     <AuthLayout>
@@ -19,26 +26,8 @@ const Signup = () => {
             <div className="text-center py-4 border-b">
               <h3 className="text-2xl font-bold">Join us Today</h3>
             </div>
-            <form className="my-3 p-5">
+            <form className="my-3 p-5" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 gap-3">
-                <FormControl my={2} isRequired>
-                  <FormLabel>First name</FormLabel>
-                  <CustomInput
-                    icon={<FaRegUser className="text-xl" />}
-                    placeholder={"Enter first name"}
-                    name={"firstName"}
-                    type={"text"}
-                  />
-                </FormControl>
-                <FormControl my={2} isRequired>
-                  <FormLabel>Last name</FormLabel>
-                  <CustomInput
-                    icon={<FaRegUser className="text-xl" />}
-                    placeholder={"Enter last name"}
-                    name={"lastName"}
-                    type={"text"}
-                  />
-                </FormControl>
                 <FormControl my={2} isRequired>
                   <FormLabel>Phone number</FormLabel>
                   <CustomInput
@@ -67,7 +56,20 @@ const Signup = () => {
                     handleEyeClick={setPasswordConfimationType}
                   />
                 </FormControl>
-                <CustomButton variant={"solid"} text={"Signup"} />
+                <div className="my-2 text-right">
+                  <div onClick={() => removePersona()}>Already have an account, <Link to="/login" className="text-primary_blue hover:underline">login In</Link></div>
+                </div>
+                {modelRegistrationMutation.isLoading || clientRegistrationMutation.isLoading ? (
+                  <LoadingButton
+                    loadingText={"Creating..."}
+                  />
+                ) : (
+                  <CustomButton
+                    type={"submit"}
+                    variant={"solid"}
+                    text={"Signup"}
+                  />
+                )}
               </div>
             </form>
           </div>

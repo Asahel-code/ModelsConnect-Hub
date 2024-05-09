@@ -20,16 +20,20 @@ const verificationTokenSchema = new Schema(
 );
 
 
-verificationTokenSchema.pre("save", async (next) => {
-    if (this.isModified("token")) {
-        const hash = await bcrypt.hash(this.token, 10);
-        this.token = hash
+verificationTokenSchema.pre("save", async function (next) {
+    try {
+        if (this.isModified("token")) {
+            const hash = await bcrypt.hash(this.token, 10);
+            this.token = hash;
+        }
+        next();
+    } catch (error) {
+        next(error);
     }
-    next();
 });
 
-verificationTokenSchema.methods.compareToken = async (token) => {
-    const result = await bcrypt.compareSync(token, this.token);
+verificationTokenSchema.methods.compareToken = function (document, token) {
+    const result = bcrypt.compareSync(token, document.token);
     return result;
 }
 

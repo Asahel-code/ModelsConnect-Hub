@@ -5,10 +5,14 @@ import { useState } from "react";
 import { MdKeyboardBackspace } from "react-icons/md";
 import ContractDetailsForm from "./ContractDetailsForm";
 import AssignModelsForm from "./AssignModelsForm";
+import { useCreateJob } from "../../../hooks/useJobs";
+import LoadingButton from "../../../components/general/LoadingButton";
 
-const CreateContractForm = ({ isModalOpen, handleOk, handleCancel }) => {
+const CreateContractForm = ({ isModalOpen, handleOk, handleCancel, refetch, isEditing, editState }) => {
 
     const [currentStage, setCurrentStage] = useState(1);
+
+    const { jobState, createJobMutation, handleChange, handleSelectChange, handleSubmit } = useCreateJob(refetch, handleCancel, isEditing, editState);
 
     return (
         <Modal
@@ -16,7 +20,7 @@ const CreateContractForm = ({ isModalOpen, handleOk, handleCancel }) => {
             width={"60%"}
             title={
                 <Title
-                    title={"Add New Contract"}
+                    title={`${isEditing ? "Update" : "Add New"} Contract`}
                     handleGoBack={() => setCurrentStage(currentStage === 1 ? 1 : currentStage - 1)}
                     currentStage={currentStage}
                 />
@@ -38,12 +42,16 @@ const CreateContractForm = ({ isModalOpen, handleOk, handleCancel }) => {
                         width={"120px"}
                         onClick={handleCancel}
                     />
-                    <CustomButton
-                        variant={"solid"}
-                        text={currentStage === 1 ? "Proceed" : "Submit"}
-                        width={"120px"}
-                        onClick={() => currentStage === 1 && setCurrentStage(2)}
-                    />
+                    {createJobMutation.isLoading ? (
+                        <LoadingButton loadingText={isEditing ? "Updating..." : "Creating..."} />
+                    ) : (
+                        <CustomButton
+                            variant={"solid"}
+                            text={isEditing ? "Update" : currentStage === 1 ? "Proceed" : "Submit"}
+                            width={"120px"}
+                            onClick={() => isEditing ? handleSubmit() : currentStage === 1 ? setCurrentStage(2) : handleSubmit()}
+                        />
+                    )}
                 </div>
             ]}
         >
@@ -53,17 +61,27 @@ const CreateContractForm = ({ isModalOpen, handleOk, handleCancel }) => {
 
             <div className={"flex rounded-full w-full bg-gray-200 my-2"}>
                 <div
-                    className={`h-1 rounded-full bg-primary_color ${currentStage === 1
+                    className={`h-1 rounded-full bg-primary_color ${isEditing ? "w-full" : currentStage === 1
                         ? "w-1/2"
                         : "w-full"
                         }`}
                 />
             </div>
-            {currentStage === 1 ? (
-                <ContractDetailsForm />
+            {isEditing ? (
+                <ContractDetailsForm
+                    jobState={jobState}
+                    handleChange={handleChange}
+                />
+            ) : (currentStage === 1 ? (
+                <ContractDetailsForm
+                    jobState={jobState}
+                    handleChange={handleChange}
+                />
             ) : currentStage === 2 && (
-                <AssignModelsForm />
-            )}
+                <AssignModelsForm
+                    handleSelectChange={handleSelectChange}
+                />
+            ))}
         </Modal>
     )
 }
@@ -94,7 +112,8 @@ CreateContractForm.propTypes = {
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
     isEditing: PropTypes.bool,
-    editState: PropTypes.object
+    editState: PropTypes.object,
+    refetch: PropTypes.func,
 }
 
 export default CreateContractForm

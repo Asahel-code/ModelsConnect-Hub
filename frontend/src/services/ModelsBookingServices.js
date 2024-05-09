@@ -13,6 +13,14 @@ const bookModels = async (data) => {
     return res.data;
 }
 
+const updateBooking = async (id, data) => {
+    setAuthToken(AxiosUtility);
+    const res = await AxiosUtility.patch(`/models_bookings/${id}`, data);
+
+    return res.data;
+}
+
+
 const fetchSpecificModelsBooking = async (id) => {
     setAuthToken(AxiosUtility);
     const res = await AxiosUtility.get(`/models_bookings/${id}`);
@@ -20,11 +28,18 @@ const fetchSpecificModelsBooking = async (id) => {
     return res.data;
 }
 
-const fetchClientModelsBooking = async () => {
+const fetchCLientModelsBooking = async () => {
     setAuthToken(AxiosUtility);
-    const res = await AxiosUtility.get(`/models_bookings/cleint_models_booking`);
+    const {data:res} = await AxiosUtility.get('/models_bookings/client');
 
-    return res.data;
+    return res;
+}
+
+const fetchModelModelsBooking = async () => {
+    setAuthToken(AxiosUtility);
+    const {data:res} = await AxiosUtility.get('/models_bookings/model');
+
+    return res;
 }
 
 const deleteModelsBooking = async (id) => {
@@ -37,8 +52,10 @@ const deleteModelsBooking = async (id) => {
 const ModelsBookingServices = {
     fetchAllModelsBooking,
     fetchSpecificModelsBooking,
-    fetchClientModelsBooking,
     bookModels,
+    updateBooking,
+    fetchCLientModelsBooking,
+    fetchModelModelsBooking,
     deleteModelsBooking
 }
 

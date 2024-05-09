@@ -3,11 +3,13 @@ import { Modal } from 'antd';
 import CustomButton from '../general/CustomButton';
 import CustomImageInput from "../general/CustomImageInput";
 import { FormControl, FormLabel } from "@chakra-ui/react";
-import { useState } from "react";
+import { useAddModelImages } from "../../hooks/useModel";
+import LoadingButton from "../general/LoadingButton";
 
-const AddImagesForm = ({ isModalOpen, handleOk, handleCancel }) => {
 
-    const [images, setImages] = useState([]);
+const AddImagesForm = ({ isModalOpen, handleOk, handleCancel, refetch }) => {
+
+    const { images, addImagesMutation, setImages, handleSubmit } = useAddModelImages(refetch, handleCancel);
 
     return (
         <Modal
@@ -23,19 +25,26 @@ const AddImagesForm = ({ isModalOpen, handleOk, handleCancel }) => {
             footer={[
                 <div
                     key={"close"}
-                    className="space-x-4"
+                    className="flex items-center justify-end space-x-4"
                 >
                     <CustomButton
                         variant={"outline"}
                         text={"Cancel"}
-                        width={"120px"}
+                        width={"fit"}
                         onClick={handleCancel}
                     />
-                    <CustomButton
-                        variant={"solid"}
-                        text={"Submit"}
-                        width={"120px"}
-                    />
+                    {addImagesMutation.isLoading ? (
+                        <LoadingButton
+                            loadingText={"Creating..."}
+                        />
+                    ) : (
+                        < CustomButton
+                            onClick={handleSubmit}
+                            variant={"solid"}
+                            text={"Submit"}
+                            width={"fit"}
+                        />
+                    )}
                 </div>
             ]}
         >
@@ -80,6 +89,7 @@ AddImagesForm.propTypes = {
     isModalOpen: PropTypes.bool,
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
+    refetch: PropTypes.func
 }
 
 export default AddImagesForm

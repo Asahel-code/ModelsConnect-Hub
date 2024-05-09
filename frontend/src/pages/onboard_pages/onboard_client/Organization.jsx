@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { FormControl, FormLabel } from "@chakra-ui/react";
 import Navigator from "../../../components/onboarding/Navigator";
 import CustomInput, { CustomSelect } from "../../../components/general/CustomInput";
+import { counties } from "../../../constants/counties";
 
 const Organization = ({ currentStep, setCurrentStep }) => {
 
@@ -19,7 +20,7 @@ const Organization = ({ currentStep, setCurrentStep }) => {
                     <FormLabel fontSize={"sm"}>Organization name</FormLabel>
                     <CustomInput
                         placeholder="Enter organization name"
-                        name="firstName"
+                        name="organizationName"
                     />
                 </FormControl>
                 <div className="grid grid-cols-2 gap-4 mt-5">
@@ -29,11 +30,14 @@ const Organization = ({ currentStep, setCurrentStep }) => {
                             placeholder={"Select county"}
                             name={"county"}
                         >
-                            <option value="Nairobi">Nairobi</option>
+                            {counties.map((county, index) => (
+                                <option key={index} value={county}>{county}</option>
+                            ))}
+
                         </CustomSelect>
                     </FormControl>
                     <FormControl isRequired>
-                        <FormLabel fontSize={"sm"}>City</FormLabel>
+                        <FormLabel fontSize={"sm"}>City/Town</FormLabel>
                         <CustomInput
                             placeholder="Enter your city"
                             name="city"

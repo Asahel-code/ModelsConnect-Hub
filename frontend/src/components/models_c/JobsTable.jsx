@@ -1,10 +1,13 @@
+import PropTypes from "prop-types"
 import { Table } from "antd";
 import CustomInput from "../general/CustomInput";
 import { GoSearch } from "react-icons/go";
-import CustomButton from "../general/CustomButton";
+import StatusTag from "../general/StatusTag";
+import moment from "moment";
+// import CustomButton from "../general/CustomButton";
 
 
-const JobsTable = () => {
+const JobsTable = ({ isLoading, data }) => {
     const columns = [
         {
             title: "Job Title",
@@ -12,46 +15,63 @@ const JobsTable = () => {
             key: "jobTitle",
         },
         {
-            title: "Contractor",
-            dataIndex: "contractor",
-            key: "contractor",
-        },
-        {
             title: "Start Date",
-            dataIndex: "start",
-            key: "start",
+            dataIndex: "startDate",
+            key: "startDate",
+            render: (_, item) => {
+                return <span>{moment(item?.startDate).format("Do MMMM, YYYY")}</span>
+            }
         },
         {
             title: "End Date",
-            dataIndex: "end",
-            key: "end",
+            dataIndex: "endDate",
+            key: "endDate",
+            render: (_, item) => {
+                return <span>{moment(item?.endDate).format("Do MMMM, YYYY")}</span>
+            }
         },
         {
             title: "Status",
             dataIndex: "status",
             key: "status",
-        },
-        {
-            title: "   ",
-            key: "action",
-            width: 100,
             // eslint-disable-next-line no-unused-vars
             render: (_, record) => (
-                <div className="flex items-center gap-4">
-                    <CustomButton
-                        variant={"solid"}
-                        text={"Accept"}
-                        onClick={() => { }}
-                    />
-                    <CustomButton
-                        variant={"outline"}
-                        text={"Decline"}
-                        onClick={() => { }}
-                    />
+                <div className={"flex gap-x-3"}>
+                    {record?.endDate > new Date().toISOString() ? (
+                        <StatusTag
+                            text={"Open"}
+                            className={"text-primary_green bg-primary_green_light w-20"}
+                        />
+                    ) : (
+                        <StatusTag
+                            text={"Closed"}
+                            className={"text-zinc-600 bg-gray-200 w-20"}
+                        />
+                    )}
                 </div>
             ),
-
         },
+        // {
+        //     title: "   ",
+        //     key: "action",
+        //     width: 100,
+        //     // eslint-disable-next-line no-unused-vars
+        //     render: (_, record) => (
+        //         <div className="flex items-center gap-4">
+        //             <CustomButton
+        //                 variant={"solid"}
+        //                 text={"Accept"}
+        //                 onClick={() => { }}
+        //             />
+        //             <CustomButton
+        //                 variant={"outline"}
+        //                 text={"Decline"}
+        //                 onClick={() => { }}
+        //             />
+        //         </div>
+        //     ),
+
+        // },
     ];
     return (
         <div className={"mt-3"}>
@@ -62,9 +82,10 @@ const JobsTable = () => {
                 />
             </div>
             <Table
+                loading={isLoading}
                 className={"shadow"}
                 columns={columns}
-                dataSource={[]}
+                dataSource={data}
                 rowClassName={"hover:cursor-pointer"}
             // pagination={{
             //   current: data?.page + 1,
@@ -75,6 +96,11 @@ const JobsTable = () => {
             />
         </div>
     )
+}
+
+JobsTable.propTypes = {
+    isLoading: PropTypes.bool,
+    data: PropTypes.array
 }
 
 export default JobsTable

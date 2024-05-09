@@ -2,11 +2,8 @@ import PropTypes from "prop-types";
 import Navigator from "../../../components/onboarding/Navigator";
 import { FormControl, FormLabel } from "@chakra-ui/react";
 import CustomImageInput from "../../../components/general/CustomImageInput";
-import { useState } from "react";
 
-const UploadPhotos = ({ currentStep, setCurrentStep }) => {
-
-    const [images, setImages] = useState([]);
+const UploadPhotos = ({ currentStep, setCurrentStep, images, setImages }) => {
 
     return (
         <div className='px-8'>
@@ -28,10 +25,10 @@ const UploadPhotos = ({ currentStep, setCurrentStep }) => {
                         />
                     </FormControl>
                 </div>
-                <div className="grid grid-cols-3 gap-y-3">
+                <div className="grid grid-cols-3 gap-y-3 gap-x-2">
                     {images?.map((image, index) => {
                         return (
-                            <div className="h-[100px] w-[120px]" key={index}>
+                            <div className="h-[150px] w-full" key={index}>
                                 <img
                                     src={URL.createObjectURL(image)}
                                     alt=""
@@ -58,6 +55,8 @@ const UploadPhotos = ({ currentStep, setCurrentStep }) => {
 UploadPhotos.propTypes = {
     currentStep: PropTypes.number,
     setCurrentStep: PropTypes.func,
+    images: PropTypes.array,
+    setImages: PropTypes.func
 }
 
 export default UploadPhotos

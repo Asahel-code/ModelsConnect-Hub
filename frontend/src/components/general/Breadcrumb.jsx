@@ -14,9 +14,9 @@ const Breadcrumb = ({ title, icon, subtitle }) => {
                     {title}
                 </p>
                 &nbsp;
-                <div className='text-sm'>
+                {subtitle && (<div className='text-sm'>
                     {"/"}
-                </div>
+                </div>)}
                 &nbsp;
                 {subtitle && (
                     <p className="text-sm">
@@ -31,7 +31,7 @@ const Breadcrumb = ({ title, icon, subtitle }) => {
 Breadcrumb.propTypes = {
     title: PropTypes.string.isRequired,
     icon: PropTypes.element.isRequired,
-    subtitle: PropTypes.string
+    subtitle: PropTypes.any
 }
 
 export default Breadcrumb

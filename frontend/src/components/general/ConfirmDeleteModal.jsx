@@ -8,7 +8,6 @@ const ConfirmDeleteModal = ({
     title,
     subTxt,
     record,
-    setRecord,
     handleDelete,
     isModalOpen,
     setIsDeleteModalOpen,
@@ -19,7 +18,6 @@ const ConfirmDeleteModal = ({
             <button
                 onClick={() => {
                     setIsDeleteModalOpen(true);
-                    setRecord(record);
                 }}
                 className={btnClassName}>
                 {btnTxt}
@@ -97,7 +95,6 @@ ConfirmDeleteModal.propTypes = {
     title: PropTypes.string,
     subTxt: PropTypes.string,
     record: PropTypes.object,
-    setRecord: PropTypes.func,
     handleDelete: PropTypes.func,
     isModalOpen: PropTypes.bool,
     setIsDeleteModalOpen: PropTypes.func,

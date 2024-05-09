@@ -1,6 +1,12 @@
-import { Table } from "antd";
+import PropTypes from "prop-types";
 
-const AssignModelsForm = () => {
+import { Table } from "antd";
+import { useAvailableModel } from "../../../hooks/useModel";
+
+const AssignModelsForm = ({ handleSelectChange }) => {
+
+    const { isLoading, data } = useAvailableModel();
+
     const columns = [
         {
             title: "Select",
@@ -10,6 +16,8 @@ const AssignModelsForm = () => {
             render: (_, item) => {
                 return <input
                     name="model"
+                    value={item?._id}
+                    onChange={handleSelectChange}
                     type={"checkbox"}
                 />;
             },
@@ -18,6 +26,14 @@ const AssignModelsForm = () => {
             title: "Model's Name",
             dataIndex: "name",
             key: "name",
+        },
+        {
+            title: "Current location",
+            dataIndex: "location",
+            key: "location",
+            render: (_, item) => {
+                return <span>{`${item?.county}, ${item?.city}`}</span>
+            }
         }
     ]
     return (
@@ -28,29 +44,23 @@ const AssignModelsForm = () => {
 
             <div>
                 <Table
-                    // loading={isLoading}
+                    loading={isLoading}
                     className={"shadow"}
                     columns={columns}
-                    dataSource={models}
-                // pagination={{
-                //     current: data?.page + 1,
-                //     total: data?.totalElements,
-                //     pageSize: data?.size,
-                //     onChange: (page) => handlePageChange(page),
-                // }}
+                    dataSource={data}
+                    pagination={{
+                        defaultPageSize: 15,
+                        showSizeChanger: true,
+                        pageSizeOptions: ["10", "15", "20", "30"],
+                    }}
                 />
             </div>
         </div>
     )
 }
 
-const models = [
-    {
-        name: "Mary Wangare"
-    },
-    {
-        name: "Paul Morogo"
-    },
-]
+AssignModelsForm.propTypes = {
+    handleSelectChange: PropTypes.func
+}
 
 export default AssignModelsForm

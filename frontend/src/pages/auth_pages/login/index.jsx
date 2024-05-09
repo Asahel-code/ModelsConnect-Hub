@@ -6,10 +6,15 @@ import AuthLayout from "../../../components/layouts/AuthLayout";
 import { Link } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa";
 import { GoLock } from "react-icons/go";
+import { useLogin } from "../../../hooks/useAuth";
+import LoadingButton from "../../../components/general/LoadingButton";
 
 const Login = () => {
 
   const [passwordType, setPasswordType] = useState("password");
+
+  const { loginMutation, handleSubmit } = useLogin();
+
   return (
     <AuthLayout>
       <div className="pt-24 pb-20 md:px-20 px-10 min-h-full">
@@ -18,7 +23,7 @@ const Login = () => {
             <div className="text-center py-4 border-b">
               <h3 className="text-2xl font-bold">Welcome back</h3>
             </div>
-            <form className="my-3 p-5">
+            <form className="my-3 p-5" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 gap-3">
                 <FormControl my={2} isRequired>
                   <FormLabel>Phone number</FormLabel>
@@ -42,7 +47,17 @@ const Login = () => {
                 <div className="my-2 text-right">
                   <Link to="/forgot_password" className="text-primary_blue hover:underline">Forgot password?</Link>
                 </div>
-                <CustomButton variant={"solid"} text={"Login"} />
+                {loginMutation.isLoading ? (
+                  <LoadingButton
+                    loadingText={"Login..."} u
+                  />
+                ) : (
+                  <CustomButton
+                    type={"submit"}
+                    variant={"solid"}
+                    text={"Login"}
+                  />
+                )}
               </div>
             </form>
           </div>

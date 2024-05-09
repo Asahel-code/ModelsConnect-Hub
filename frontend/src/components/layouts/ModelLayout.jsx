@@ -4,11 +4,14 @@ import SideNav from '../SideNav';
 import TopNav from '../TopNav';
 import { MdOutlineHome } from "react-icons/md";
 import { RiGalleryView } from "react-icons/ri";
+import { useModelProfile } from '../../hooks/useModel';
 
 const ModelLayout = ({ children }) => {
 
   const [showSideBar, setShowSideBar] = useState(true);
   const [current, setCurrent] = useState("home");
+
+  const { isLoading, data } = useModelProfile();
 
   const handleToggle = () => {
     setShowSideBar((prev) => !prev);
@@ -44,7 +47,7 @@ const ModelLayout = ({ children }) => {
       />
 
       <div className="min-h-full w-full">
-        <TopNav toggleSideBar={handleToggle} links={topNavLinks} />
+        <TopNav avatar={!isLoading ? `${data?.name?.split(" ")[0].charAt(0)}${data?.name?.split(" ")[1].charAt(0)}`: ""} username={!isLoading ? data?.name : ""} toggleSideBar={handleToggle} links={topNavLinks} />
         {children}
       </div>
     </div>

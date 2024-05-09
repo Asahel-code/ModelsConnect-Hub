@@ -4,12 +4,10 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
     {
-        username: { type: String, required: true },
         phoneNumber: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         isVerified: { type: Boolean, default: false, required: true },
         isAdmin: { type: Boolean, default: false, required: true },
-        isStaff: { type: Boolean, default: false, required: true },
         isClient: { type: Boolean, default: false, required: true },
         isModel: { type: Boolean, default: false, required: true },
         refreshToken: String,

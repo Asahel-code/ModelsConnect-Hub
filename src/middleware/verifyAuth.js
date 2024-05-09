@@ -10,9 +10,7 @@ const verifyAuth = (req, res, next) => {
         (error, decoded) => {
             if (error) return res.status(403).json({ "message": "Invalid token!" }); //invalid token
             req.userId = decoded.UserInfo.userId;
-            req.user = decoded.UserInfo.username;
             req.isAdmin = decoded.UserInfo.isAdmin;
-            req.isStaff = decoded.UserInfo.isStaff;
             req.isModel = decoded.UserInfo.isModel;
             req.isClient = decoded.UserInfo.isClient;
             next();

@@ -18,7 +18,7 @@ const connectDB = async () => {
     
     try {
         mongoose.set('strictQuery', true);
-        mongoose.connect(dbURI, { useNewUrlParser: true });
+        mongoose.connect(dbURI);
     }
     catch (error) {
         console.log(error.message);

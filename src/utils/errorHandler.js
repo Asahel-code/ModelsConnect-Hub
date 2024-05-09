@@ -3,19 +3,8 @@ const passwordComplexity = require("joi-password-complexity");
 
 const validateUser = (user) => {
     const schema = Joi.object({
-        phoneNumber: Joi.string().email().required(),
+        phoneNumber: Joi.string().required(),
         password: passwordComplexity().required(),
-    });
-
-    return schema.validate(user);
-}
-
-const validateRegisterUser = (user) => {
-    const schema = Joi.object({
-        name: Joi.string().required(),
-        phoneNumber: Joi.string().email().required(),
-        password: passwordComplexity().required(),
-        passwordConfirmation: passwordComplexity().required().valid(Joi.ref('password')),
     });
 
     return schema.validate(user);
@@ -42,7 +31,6 @@ const validatePasswordReset = (user) => {
         phoneNumber: Joi.string().required(),
         currentPassword: Joi.string().required(),
         password: passwordComplexity().required(),
-        passwordConfirmation: passwordComplexity().required().valid(Joi.ref('password')),
     });
 
     return schema.validate(user);
@@ -59,7 +47,6 @@ const validateUserId = (user) => {
 
 module.exports = {
     validateUser,
-    validateRegisterUser,
     validateOtp,
     validateUserId,
     validatePasswordResetRequest,

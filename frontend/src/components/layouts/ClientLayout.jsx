@@ -3,6 +3,7 @@ import { useState } from "react";
 import SideNav from '../SideNav';
 import TopNav from '../TopNav';
 import { MdOutlineHome, MdWorkOutline  } from "react-icons/md";
+import { useClientProfile } from '../../hooks/useClient';
 
 const ClientLayout = ({ children }) => {
   const [showSideBar, setShowSideBar] = useState(true);
@@ -11,6 +12,8 @@ const ClientLayout = ({ children }) => {
   const handleToggle = () => {
     setShowSideBar((prev) => !prev);
   };
+
+  const { isLoading, data } = useClientProfile();
 
   const topNavLinks = [
     {
@@ -42,7 +45,7 @@ const ClientLayout = ({ children }) => {
       />
 
       <div className="min-h-full w-full">
-        <TopNav toggleSideBar={handleToggle} links={topNavLinks} />
+        <TopNav avatar={!isLoading ? data?.persona === "self" ?`${data?.name?.split(" ")[0].charAt(0)}${data?.name?.split(" ")[1].charAt(0)}`: data?.name?.charAt(0): ""} username={!isLoading ? data?.name : ""} toggleSideBar={handleToggle} links={topNavLinks} />
         {children}
       </div>
     </div>

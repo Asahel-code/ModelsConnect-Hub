@@ -18,13 +18,6 @@ const registerModel = async (data) => {
   return res.data;
 }
 
-const registerStaff = async (data) => {
-  setAuthToken(AxiosUtility);
-  const res = await AxiosUtility.post("/register/staff", data);
-
-  return res.data;
-}
-
 const verifyAccount = async (data) => {
   setAuthToken(AxiosUtility);
   const res = await AxiosUtility.post("/auth/verify_account", data);
@@ -34,7 +27,7 @@ const verifyAccount = async (data) => {
 
 const resendVerificationToken = async () => {
   setAuthToken(AxiosUtility);
-  const res = await AxiosUtility.get("/auth/resend_verification_token");
+  const res = await AxiosUtility.post("/auth/resend_verification_token");
 
   return res.data;
 }
@@ -55,7 +48,6 @@ const AuthServices = {
   login,
   registerClient,
   registerModel,
-  registerStaff,
   requestPasswordReset,
   resetPassword,
   verifyAccount,
