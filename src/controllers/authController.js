@@ -195,7 +195,7 @@ const verifyAccount = async (req, res) => {
 
 const resendVerificationToken = async (req, res) => {
     //Getting the user id 
-    const foundUser = await User.findOne({ username: req.user }).exec();
+    const foundUser = await User.findOne({ _id: req.userId }).exec();
     if (!foundUser) return res.status(404).json({ message: 'User does not exist!' });
 
     //Check email verification status
