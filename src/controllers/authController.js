@@ -109,7 +109,7 @@ const resetPassword = async (req, res) => {
         process.env.PASSWORD_RESET_SECRET,
         async (error, decoded) => {
             if (error || foundUser.phoneNumber !== decoded.phoneNumber) return res.status(403).json(({ message: "You haven't initiated a password reset your or your token has expired!! Please resend your phone number" }));
-            if (error || body.currentPassword !== decoded.token) return res.status(403).json(({ message: "Your password token has expired!! Please resend your phone number" }));
+            if (error || body.resetToken !== decoded.token) return res.status(403).json(({ message: "Your password token has expired!! Please resend your phone number" }));
             else {
                 try {
                     await VerificationToken.findByIdAndDelete(token._id);

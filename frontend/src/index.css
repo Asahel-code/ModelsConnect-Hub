@@ -13,11 +13,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.image_section {
-    background-image: url(./assets/images/hostel_image.png);
-    background-repeat: no-repeat;
-}
-
 .spinner {
     position: relative;
     width: 60px;

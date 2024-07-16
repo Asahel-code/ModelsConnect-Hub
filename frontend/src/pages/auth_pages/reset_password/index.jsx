@@ -5,11 +5,15 @@ import CustomButton from "../../../components/general/CustomButton";
 import AuthLayout from "../../../components/layouts/AuthLayout";
 import { MdOutlineToken } from "react-icons/md";
 import { GoLock } from "react-icons/go";
+import { useResetPassword } from "../../../hooks/useAuth";
+import LoadingButton from "../../../components/general/LoadingButton";
 
 const ResetPassword = () => {
 
     const [passwordType, setPasswordType] = useState("password");
     const [passwordConfirmationType, setPasswordConfimationType] = useState("password");
+
+    const { resetPasswordMutation, handleSubmit } = useResetPassword();
 
     return (
         <AuthLayout>
@@ -19,7 +23,7 @@ const ResetPassword = () => {
                         <div className="text-center py-4 border-b">
                             <h3 className="text-2xl font-bold">Reset your password</h3>
                         </div>
-                        <form className="my-3 p-5">
+                        <form className="my-3 p-5" onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 gap-3">
                                 <FormControl my={2} isRequired>
                                     <FormLabel>Phone number</FormLabel>
@@ -58,7 +62,17 @@ const ResetPassword = () => {
                                         handleEyeClick={setPasswordConfimationType}
                                     />
                                 </FormControl>
-                                <CustomButton variant={"solid"} text={"Submit"} />
+                                {resetPasswordMutation.isLoading ? (
+                                    <LoadingButton
+                                        loadingText={"Sending..."} 
+                                    />
+                                ) : (
+                                    <CustomButton
+                                        type={"submit"}
+                                        variant={"solid"}
+                                        text={"Submit"}
+                                    />
+                                )}
                             </div>
                         </form>
                     </div>
