@@ -6,7 +6,6 @@ import { useErrorToast } from "./useErrorToast"
 import useUserStore, { useSignUpFlowStore } from "../utils/zustand/Store"
 import { useState } from "react"
 
-
 export const useLogin = () => {
     const navigate = useNavigate();
     const handleSuccess = useSuccessToast();
@@ -176,4 +175,76 @@ export const useResendVerificationTokenRequest = () => {
     }
 
     return { counter, isRequested, resendVerificationToken }
+}
+
+export const useRequestPasswordReset = () => {
+    const navigate = useNavigate();
+    const handleSuccess = useSuccessToast();
+    const handleError = useErrorToast();
+
+    const requestPasswordResetMutation = useMutation(
+        async (data) => await AuthServices.requestPasswordReset(data),
+        {
+            onSuccess: (res) => {
+                handleSuccess({ message: res?.message });
+                navigate("/reset_password");
+            },
+            onError: (error) => {
+                handleError(error);
+            }
+        }
+    );
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let formData = new FormData(e.currentTarget);
+        let data = Object.fromEntries(formData);
+
+        const reFormatPhoneNumber = "+254".concat(data?.phoneNumber?.split()[0]?.substr(1, 10))
+
+        requestPasswordResetMutation.mutateAsync({ phoneNumber: reFormatPhoneNumber });
+
+    }
+
+    return { requestPasswordResetMutation, handleSubmit }
+}
+
+export const useResetPassword = () => {
+    const navigate = useNavigate();
+    const handleSuccess = useSuccessToast();
+    const handleError = useErrorToast();
+
+    const resetPasswordMutation = useMutation(
+        async (data) => await AuthServices.resetPassword(data),
+        {
+            onSuccess: (res) => {
+                handleSuccess({ message: res?.message });
+                navigate("/login");
+            },
+            onError: (error) => {
+                handleError(error);
+            }
+        }
+    );
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let formData = new FormData(e.currentTarget);
+        let data = Object.fromEntries(formData);
+
+        if (data.password === data.passwordConfirmation) {
+            const reFormatPhoneNumber = "+254".concat(data?.phoneNumber?.split()[0]?.substr(1, 10))
+            resetPasswordMutation.mutateAsync({
+                phoneNumber: reFormatPhoneNumber,
+                resetToken: data.resetToken,
+                password: data.password
+            });
+        }
+
+
+    }
+
+    return { resetPasswordMutation, handleSubmit }
 }

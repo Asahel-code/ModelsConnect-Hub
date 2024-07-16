@@ -29,7 +29,7 @@ const validatePasswordResetRequest = (user) => {
 const validatePasswordReset = (user) => {
     const schema = Joi.object({
         phoneNumber: Joi.string().required(),
-        currentPassword: Joi.string().required(),
+        resetToken: Joi.string().required(),
         password: passwordComplexity().required(),
     });
 

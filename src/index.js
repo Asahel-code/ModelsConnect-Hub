@@ -52,5 +52,5 @@ else {
 
 mongoose.connection.once('open', () => {
   console.log('Connected to Database');
-  app.listen(PORT, () => console.log(`Server running on ${PORT} ... \n, Access it on http://localhost:${PORT}`));
+  app.listen(PORT, () => console.log(`Server running on ${PORT} ... \nAccess it on http://localhost:${PORT}`));
 });
